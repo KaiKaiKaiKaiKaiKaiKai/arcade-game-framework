@@ -1,0 +1,12 @@
+Controller, Model or View?
+  Does it return anything except view?
+    No
+      It's a Controller
+    Yes
+      Does it display anything?
+        No
+          It's a Model
+        Yes
+          It's a View
+
+NOTE: MOVE IGAME SOMEWHERE DATABASE RELATED, MAKE NEW GAME CLASS WHICH MAKES THE VIEW

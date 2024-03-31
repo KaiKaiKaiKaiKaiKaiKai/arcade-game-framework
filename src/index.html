@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dynamic Game Loader</title>
+</head>
+<body style="padding:0;margin:0;height:100vh;width:100vw;">
+    <script>
+        // Function to parse query parameters
+        function getQueryParam(param) {
+            var queryString = window.location.search;
+            var urlParams = new URLSearchParams(queryString);
+            return urlParams.get(param);
+        }
+
+        // Get the gameId from query parameters
+        var gameId = devGameId ?? getQueryParam('gameId');
+
+        if (devGameId) {
+            history.pushState({}, "", '?gameId=' + gameId);
+        }
+
+        if (gameId) {
+            // Dynamically create script element and set its source
+            var script = document.createElement('script');
+            script.src = `game-${gameId}.js`;
+
+            // Add script to the document body
+            document.body.appendChild(script);
+        } else {
+            console.error('No gameId parameter found in the URL.');
+        }
+    </script>
+</body>
+</html>
