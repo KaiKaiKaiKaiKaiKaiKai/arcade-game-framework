@@ -5,13 +5,18 @@
     "2": "Bombs Away"
   },
   "rules": {
-    "0": "Where is the ball? Find it and win a prize!",
-    "1": "Guess if the next card is higher or lower than the last one. Get it right and win a prize!",
-    "2": "When will the bomb explode? Cash out before it does and win a prize!"
+    "0": "Where is the ball? Find it and win triple your bet!",
+    "1": "Guess if the next card is higher or lower than the last one. Get it right and win double your bet!",
+    "2": "When will the bomb explode? Guess right and win 5x your bet!"
   },
   "rtp": {
     "0": "0.96",
     "1": "0.96",
     "2": "0.96"
+  },
+  "payout": {
+    "0": "3",
+    "1": "2",
+    "2": "5"
   }
 }

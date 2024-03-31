@@ -20,4 +20,15 @@ export class ConnectionModel {
   public get rtp(): string {
     return this.database.rtp[this.gameId]
   }
+
+  public get payout(): string {
+    return this.database.payout[this.gameId]
+  }
+
+  public get win(): boolean {
+    const payout = Number(this.database.payout[this.gameId])
+    const rtp = Number(this.database.rtp[this.gameId])
+
+    return Math.random() < (rtp * 1) / payout
+  }
 }

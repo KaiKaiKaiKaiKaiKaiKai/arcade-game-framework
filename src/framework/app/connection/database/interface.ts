@@ -8,4 +8,7 @@ interface IDatabase {
   rtp: {
     [k in number]: string
   }
+  payout: {
+    [k in number]: string
+  }
 }

@@ -49,8 +49,8 @@ export class UIView extends Container {
   }
 
   public async disable(): Promise<void> {
-    this.interactive = true
-    this.playButton.interactive = true
+    this.interactive = false
+    this.playButton.interactive = false
     this.playButton.cursor = 'normal'
 
     await gsap.to(this.playButton, { alpha: 0.5, duration: 0.5 })

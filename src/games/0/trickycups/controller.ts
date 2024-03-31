@@ -6,7 +6,7 @@ export class TrickyCups extends Game {
     super(props)
   }
 
-  public async play(): Promise<void> {
-    console.log('TrickyCups game started')
+  public async play(props: { win: boolean }): Promise<void> {
+    await this.view.play(props)
   }
 }

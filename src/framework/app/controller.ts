@@ -3,8 +3,9 @@ import { IGame } from '../../framework/app/game/interface'
 import { Stage } from './game/stage/controller'
 import { Game } from './game/controller'
 import { Assets, Container } from 'pixi.js'
+import { GameView } from './game/view'
 
-export class App<TGameController extends Game, TGameView extends Container> {
+export class App<TGameController extends Game, TGameView extends GameView> {
   constructor(props: {
     gameControllerClass: new (props: IGame) => TGameController
     gameViewClass: new () => TGameView
@@ -28,8 +29,8 @@ export class App<TGameController extends Game, TGameView extends Container> {
         resizeContainer.addChild(game.view)
         stage.view.handleResize()
 
-        stage.view.uiCallback = async () => {
-          await game.play()
+        stage.view.uiPlayCallback = async () => {
+          await game.play({ win: connection.win })
           stage.view.enableUI()
         }
       })

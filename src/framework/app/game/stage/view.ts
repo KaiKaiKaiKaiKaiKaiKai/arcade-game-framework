@@ -1,4 +1,4 @@
-import { Application, Container, EventEmitter, Graphics } from 'pixi.js'
+import { Application, Container, EventEmitter, Graphics, Sprite, Texture } from 'pixi.js'
 import { UI } from './ui/controller'
 
 export class StageView {
@@ -7,6 +7,7 @@ export class StageView {
   public resizeContainer: Container
   private resizeDiv: HTMLDivElement
   private ui: UI
+  private background: Sprite
 
   constructor(props: { name: string }) {
     this.resizeDiv = document.createElement('div')
@@ -19,6 +20,7 @@ export class StageView {
 
     this.resizeContainer = new Container()
     this.ui = new UI({ name: props.name })
+    this.background = new Sprite(Texture.from('background'))
 
     this.pixiApp = new Application()
     this.appLoaded = this.pixiApp
@@ -31,9 +33,22 @@ export class StageView {
 
         this.resizeDiv.appendChild(this.pixiApp.canvas)
 
+        this.pixiApp.stage.addChild(this.background)
         this.pixiApp.stage.addChild(this.resizeContainer)
         this.pixiApp.stage.addChild(this.ui.view)
       })
+  }
+
+  private resizeBackground(props: { width: number; height: number }) {
+    const scale = Math.max(
+      props.width / this.background.texture.width,
+      props.height / this.background.texture.height
+    )
+
+    this.background.scale.set(scale)
+
+    this.background.x = (props.width - this.background.width) / 2
+    this.background.y = (props.height - this.background.height) / 2
   }
 
   public handleResize() {
@@ -57,13 +72,15 @@ export class StageView {
 
     this.resizeContainer.x = clientWidth / 2
     this.resizeContainer.y = clientHeight / 2
+
+    this.resizeBackground({ width: clientWidth, height: clientHeight - this.ui.view.height })
   }
 
   public enableUI() {
     this.ui.view.enable()
   }
 
-  public set uiCallback(callback: () => Promise<void>) {
+  public set uiPlayCallback(callback: () => Promise<void>) {
     this.ui.view.on('play', callback)
   }
 }
