@@ -5,4 +5,8 @@ export class TrickyCups extends Game {
   constructor(props: IGame) {
     super(props)
   }
+
+  public async play(): Promise<void> {
+    console.log('TrickyCups game started')
+  }
 }

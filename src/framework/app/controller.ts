@@ -3,7 +3,6 @@ import { IGame } from '../../framework/app/game/interface'
 import { Stage } from './game/stage/controller'
 import { Game } from './game/controller'
 import { Assets, Container } from 'pixi.js'
-import * as PIXI from 'pixi.js'
 
 export class App<TGameController extends Game, TGameView extends Container> {
   constructor(props: {
@@ -14,12 +13,13 @@ export class App<TGameController extends Game, TGameView extends Container> {
     const { gameControllerClass, gameViewClass, gameId } = props
     const connection = new ConnectionModel({ gameId })
 
+    const { name, rules, rtp } = connection
+
     // Call the function to load assets
     this.loadAssetsFromManifest(gameId).then(() => {
-      const stage = new Stage()
+      const stage = new Stage({ name })
 
       stage.view.appLoaded.then(() => {
-        const { name, rules, rtp } = connection
         const { resizeContainer } = stage.view
 
         const view = new gameViewClass()
@@ -27,6 +27,11 @@ export class App<TGameController extends Game, TGameView extends Container> {
 
         resizeContainer.addChild(game.view)
         stage.view.handleResize()
+
+        stage.view.uiCallback = async () => {
+          await game.play()
+          stage.view.enableUI()
+        }
       })
     })
   }

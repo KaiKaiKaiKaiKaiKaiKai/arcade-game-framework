@@ -1,7 +1,7 @@
-import { Container, Text } from 'pixi.js'
+import { Container } from 'pixi.js'
 import { IGame } from '../../../framework/app/game/interface'
 
-export class Game {
+export abstract class Game {
   protected name: string
   protected rules: string
   protected rtp: string
@@ -13,4 +13,6 @@ export class Game {
     this.rtp = props.rtp
     this.view = props.view
   }
+
+  public async play(): Promise<void> {}
 }
