@@ -6,7 +6,7 @@ export class TrickyCups extends Game {
     super(props)
   }
 
-  public async play(props: { win: boolean }): Promise<void> {
+  public async play(props: { win: number }): Promise<void> {
     await this.view.play(props)
   }
 }

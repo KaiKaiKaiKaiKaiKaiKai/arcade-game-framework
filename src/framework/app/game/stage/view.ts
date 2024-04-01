@@ -83,4 +83,12 @@ export class StageView {
   public set uiPlayCallback(callback: () => Promise<void>) {
     this.ui.view.on('play', callback)
   }
+
+  public set uiBankText(bank: number) {
+    this.ui.view.bank = bank
+  }
+
+  public set uiBetText(bet: number) {
+    this.ui.view.bet = bet
+  }
 }

@@ -15,5 +15,5 @@ export abstract class Game {
     this.view = props.view
   }
 
-  public async play(props: { win: boolean }): Promise<void> {}
+  public async play(props: { win: number }): Promise<void> {}
 }

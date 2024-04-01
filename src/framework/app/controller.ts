@@ -6,6 +6,9 @@ import { Assets, Container } from 'pixi.js'
 import { GameView } from './game/view'
 
 export class App<TGameController extends Game, TGameView extends GameView> {
+  private bank: number = 500
+  private bet: number
+
   constructor(props: {
     gameControllerClass: new (props: IGame) => TGameController
     gameViewClass: new () => TGameView
@@ -16,12 +19,17 @@ export class App<TGameController extends Game, TGameView extends GameView> {
 
     const { name, rules, rtp } = connection
 
+    this.bet = connection.defaultBet
+
     // Call the function to load assets
     this.loadAssetsFromManifest(gameId).then(() => {
       const stage = new Stage({ name })
 
       stage.view.appLoaded.then(() => {
         const { resizeContainer } = stage.view
+
+        stage.view.uiBankText = this.bank
+        stage.view.uiBetText = this.bet
 
         const view = new gameViewClass()
         const game = new gameControllerClass({ name, rules, rtp, view })
@@ -30,7 +38,16 @@ export class App<TGameController extends Game, TGameView extends GameView> {
         stage.view.handleResize()
 
         stage.view.uiPlayCallback = async () => {
-          await game.play({ win: connection.win })
+          if (this.bank < this.bet) return
+
+          this.bank -= this.bet
+          stage.view.uiBankText = this.bank
+
+          const win = connection.win
+          await game.play({ win })
+
+          this.bank += win * this.bet
+          stage.view.uiBankText = this.bank
           stage.view.enableUI()
         }
       })

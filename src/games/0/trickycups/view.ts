@@ -68,13 +68,18 @@ export class TrickyCupsView extends Container {
     }
   }
 
-  private async userChoice(win: boolean) {
+  private async userChoice(win: number) {
     await new Promise<void>((resolve) => {
       for (const cup of this.cups) {
         cup.interactive = true
         cup.cursor = 'pointer'
         cup.removeAllListeners()
         cup.on('pointerdown', async () => {
+          for (const cup of this.cups) {
+            cup.interactive = false
+            cup.cursor = 'normal'
+          }
+
           this.selectedCup = cup
 
           if (win) {
@@ -87,20 +92,16 @@ export class TrickyCupsView extends Container {
             const cups = this.cups.filter((c) => c !== cup)
             this.selectedCup = cups[Math.floor(Math.random() * cups.length)]
             this.placeBall()
+            await this.revealBall()
           }
 
           resolve()
         })
       }
     })
-
-    for (const cup of this.cups) {
-      cup.interactive = false
-      cup.cursor = 'normal'
-    }
   }
 
-  public async play(props: { win: boolean }) {
+  public async play(props: { win: number }) {
     await this.revealBall()
     await this.shuffleCups()
     await this.userChoice(props.win)

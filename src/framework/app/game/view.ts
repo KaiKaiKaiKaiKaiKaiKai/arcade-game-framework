@@ -5,5 +5,5 @@ export abstract class GameView extends Container {
     super()
   }
 
-  public async play(props: { win: boolean }): Promise<void> {}
+  public async play(props: { win: number }): Promise<void> {}
 }
