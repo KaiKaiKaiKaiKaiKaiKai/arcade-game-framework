@@ -1,4 +1,4 @@
-import databaseJson from '../../../database/database.json'
+import databaseJson from '../../database/database.json'
 
 export class ConnectionModel {
   private database: IDatabase

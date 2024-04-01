@@ -1,4 +1,4 @@
-import { ConnectionModel } from '../../framework/app/connection/model'
+import { ConnectionModel } from '../connection/model'
 import { Stage } from './stage/controller'
 import { Game, GameProps } from './game/controller'
 import { Assets, Container } from 'pixi.js'
