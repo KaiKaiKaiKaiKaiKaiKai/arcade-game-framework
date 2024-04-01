@@ -14,22 +14,24 @@
             return urlParams.get(param);
         }
 
-        // Get the gameId from query parameters
-        var gameId = devGameId ?? getQueryParam('gameId');
-
-        if (devGameId) {
-            history.pushState({}, "", '?gameId=' + gameId);
-        }
-
-        if (gameId) {
+        function launchGame(gameId) {
             // Dynamically create script element and set its source
             var script = document.createElement('script');
             script.src = `game-${gameId}.js`;
 
             // Add script to the document body
             document.body.appendChild(script);
+            history.pushState({}, "", '?gameId=' + gameId)
+        }
+
+        // Get the gameId from query parameters
+        var gameId = getQueryParam('gameId');
+
+        if (gameId) {
+            launchGame(gameId);
         } else {
-            console.error('No gameId parameter found in the URL.');
+            console.error('Game ID not provided');
+            console.log('Use "launchGame(gameId)" to load a game');
         }
     </script>
 </body>

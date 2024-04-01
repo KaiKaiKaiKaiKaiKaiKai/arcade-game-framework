@@ -29,14 +29,6 @@ module.exports = (env) => {
           { 
             from: path.resolve(__dirname, 'src', 'index.html'), 
             to: path.resolve(__dirname, 'dist'), 
-            transform(content) {
-              const redirectScript = `
-                <script>
-                  var devGameId = '${env.gameId}';
-                </script>
-              `;
-              return content.toString().replace('</head>', `${redirectScript}</head>`);
-            }
           },
           { 
             from: path.resolve(__dirname, `src/games/${env.gameId}/assets`), 
