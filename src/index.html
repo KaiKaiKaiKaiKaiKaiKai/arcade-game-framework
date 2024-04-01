@@ -3,36 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dynamic Game Loader</title>
+    <title>Kai's Arcade Games</title>
 </head>
 <body style="padding:0;margin:0;height:100vh;width:100vw;">
-    <script>
-        // Function to parse query parameters
-        function getQueryParam(param) {
-            var queryString = window.location.search;
-            var urlParams = new URLSearchParams(queryString);
-            return urlParams.get(param);
-        }
-
-        function launchGame(gameId) {
-            // Dynamically create script element and set its source
-            var script = document.createElement('script');
-            script.src = `game-${gameId}.js`;
-
-            // Add script to the document body
-            document.body.appendChild(script);
-            history.pushState({}, "", '?gameId=' + gameId)
-        }
-
-        // Get the gameId from query parameters
-        var gameId = getQueryParam('gameId');
-
-        if (gameId) {
-            launchGame(gameId);
-        } else {
-            console.error('Game ID not provided');
-            console.log('Use "launchGame(gameId)" to load a game');
-        }
-    </script>
 </body>
 </html>

@@ -20,7 +20,7 @@ module.exports = (env) => {
       extensions: ['.tsx', '.ts', '.js'],
     },
     output: {
-      filename: `game-${env.gameId}.js`,
+      filename: `game.${env.gameId}.js`,
       path: path.resolve(__dirname, 'dist'),
     },
     plugins: [
@@ -28,7 +28,13 @@ module.exports = (env) => {
         patterns: [
           { 
             from: path.resolve(__dirname, 'src', 'index.html'), 
-            to: path.resolve(__dirname, 'dist'), 
+            to: path.resolve(__dirname, 'dist'),
+            transform(content) {
+              const loadScript = `
+                <script src='game.${env.gameId}.js'></script>
+              `;
+              return content.toString().replace('</body>', `${loadScript}</body>`);
+            }
           },
           { 
             from: path.resolve(__dirname, `src/games/${env.gameId}/assets`), 
