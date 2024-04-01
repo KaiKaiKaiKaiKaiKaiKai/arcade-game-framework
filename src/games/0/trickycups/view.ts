@@ -75,7 +75,6 @@ export class TrickyCupsView extends Container {
         cup.cursor = 'pointer'
         cup.removeAllListeners()
         cup.on('pointerdown', async () => {
-          console.log('button win', win)
           this.selectedCup = cup
 
           if (win) {
@@ -104,7 +103,6 @@ export class TrickyCupsView extends Container {
   public async play(props: { win: boolean }) {
     await this.revealBall()
     await this.shuffleCups()
-    console.log(props.win)
     await this.userChoice(props.win)
   }
 }
