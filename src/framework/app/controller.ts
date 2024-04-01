@@ -38,7 +38,7 @@ export class App<TGameController extends Game<TGameView>, TGameView extends Game
 
     await this.loadAssetsFromManifest(gameId)
 
-    this.stage = new Stage({ name })
+    this.stage = new Stage()
 
     await this.stage.view.appLoaded
     const { resizeContainer } = this.stage.view
@@ -107,8 +107,9 @@ export class App<TGameController extends Game<TGameView>, TGameView extends Game
 
   private handleResize() {
     const { width, height } = this.stage.view.resizeDimensions
+    const { scaleFactor } = this.game.view
 
     this.ui.view.handleResize({ width, height })
-    this.stage.view.handleResize({ width, height, offset: this.ui.view.height })
+    this.stage.view.handleResize({ width, height, offset: this.ui.view.height, scaleFactor })
   }
 }

@@ -7,7 +7,7 @@ export class StageView {
   private resizeDiv: HTMLDivElement
   private background: Sprite
 
-  constructor(props: { name: string }) {
+  constructor() {
     this.resizeDiv = document.createElement('div')
 
     this.resizeDiv.style.width = '100%'
@@ -47,25 +47,26 @@ export class StageView {
     this.background.y = (props.height - this.background.height) / 2
   }
 
-  public handleResize(props: { width: number; height: number; offset: number }) {
-    const { width, height, offset } = props
+  public handleResize(props: {
+    width: number
+    height: number
+    offset: number
+    scaleFactor: number
+  }) {
+    const { width, height, offset, scaleFactor } = props
     this.pixiApp.renderer.resize(width, height)
 
-    const scale = Math.min(
-      width / this.resizeContainer.getLocalBounds().width,
-      (height - offset) / this.resizeContainer.getLocalBounds().height,
-      1
-    )
+    const scale =
+      Math.min(
+        width / this.resizeContainer.getLocalBounds().width,
+        (height - offset) / this.resizeContainer.getLocalBounds().height,
+        1
+      ) * scaleFactor
 
     this.resizeContainer.scale.set(scale)
 
-    this.resizeContainer.pivot.set(
-      this.resizeContainer.width / 2 / scale,
-      this.resizeContainer.height / 2 / scale + offset
-    )
-
-    this.resizeContainer.x = width / 2
-    this.resizeContainer.y = height / 2
+    this.resizeContainer.x = width / 2 - this.resizeContainer.width / 2
+    this.resizeContainer.y = (height - offset) / 2 - this.resizeContainer.height / 2
 
     this.resizeBackground({ width, height })
   }

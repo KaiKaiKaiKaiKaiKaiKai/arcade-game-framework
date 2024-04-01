@@ -5,6 +5,5 @@ export class Cup extends Sprite {
     super()
 
     this.texture = Texture.from('redcup')
-    this.y = 300
   }
 }

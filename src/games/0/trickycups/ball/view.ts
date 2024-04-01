@@ -5,6 +5,6 @@ export class Ball extends Sprite {
     super()
 
     this.texture = Texture.from('ball')
-    this.y = 500
+    this.y = 200
   }
 }

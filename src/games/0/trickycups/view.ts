@@ -1,19 +1,20 @@
-import { Container, Sprite, Text, Texture } from 'pixi.js'
+import { Sprite, Texture } from 'pixi.js'
 import { Cup } from './cup/view'
 import { Ball } from './ball/view'
 import gsap from 'gsap'
+import { GameView } from '../../../framework/app/game/view'
 
-export class TrickyCupsView extends Container {
+export class TrickyCupsView extends GameView {
   private ball: Ball
   private cups: Array<Cup> = []
   private selectedCup: Cup
   constructor() {
     super()
 
-    this.scale.set(0.6)
+    this.scaleFactor = 0.8
     this.sortableChildren = true
 
-    const table = new Sprite({ texture: Texture.from('table'), y: 500 })
+    const table = new Sprite({ texture: Texture.from('table'), y: 200 })
     table.zIndex = 0
 
     for (let i = 0; i < 3; i++) {
