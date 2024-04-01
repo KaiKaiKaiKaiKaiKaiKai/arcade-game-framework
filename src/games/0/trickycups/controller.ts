@@ -1,8 +1,8 @@
-import { IGame } from '../../../framework/app/game/interface'
-import { Game } from '../../../framework/app/game/controller'
+import { Game, GameProps } from '../../../framework/app/game/controller'
+import { TrickyCupsView } from './view'
 
-export class TrickyCups extends Game {
-  constructor(props: IGame) {
+export class TrickyCups extends Game<TrickyCupsView> {
+  constructor(props: GameProps<TrickyCupsView>) {
     super(props)
   }
 

@@ -1,12 +1,10 @@
-import { Application, Container, EventEmitter, Graphics, Sprite, Texture } from 'pixi.js'
-import { UI } from './ui/controller'
+import { Application, Container, Sprite, Texture } from 'pixi.js'
 
 export class StageView {
-  public pixiApp: Application
   public appLoaded: Promise<void>
+  private pixiApp: Application
   public resizeContainer: Container
   private resizeDiv: HTMLDivElement
-  private ui: UI
   private background: Sprite
 
   constructor(props: { name: string }) {
@@ -19,7 +17,6 @@ export class StageView {
     document.body.appendChild(this.resizeDiv)
 
     this.resizeContainer = new Container()
-    this.ui = new UI({ name: props.name })
     this.background = new Sprite(Texture.from('background'))
 
     this.pixiApp = new Application()
@@ -35,7 +32,6 @@ export class StageView {
 
         this.pixiApp.stage.addChild(this.background)
         this.pixiApp.stage.addChild(this.resizeContainer)
-        this.pixiApp.stage.addChild(this.ui.view)
       })
   }
 
@@ -51,15 +47,13 @@ export class StageView {
     this.background.y = (props.height - this.background.height) / 2
   }
 
-  public handleResize() {
-    const { clientWidth, clientHeight } = this.resizeDiv
-
-    this.pixiApp.renderer.resize(clientWidth, clientHeight)
-    this.ui.view.handleResize({ width: clientWidth, height: clientHeight })
+  public handleResize(props: { width: number; height: number; offset: number }) {
+    const { width, height, offset } = props
+    this.pixiApp.renderer.resize(width, height)
 
     const scale = Math.min(
-      clientWidth / this.resizeContainer.getLocalBounds().width,
-      (clientHeight - this.ui.view.height) / this.resizeContainer.getLocalBounds().height,
+      width / this.resizeContainer.getLocalBounds().width,
+      (height - offset) / this.resizeContainer.getLocalBounds().height,
       1
     )
 
@@ -67,28 +61,23 @@ export class StageView {
 
     this.resizeContainer.pivot.set(
       this.resizeContainer.width / 2 / scale,
-      (this.resizeContainer.height + this.ui.view.height) / 2 / scale
+      this.resizeContainer.height / 2 / scale + offset
     )
 
-    this.resizeContainer.x = clientWidth / 2
-    this.resizeContainer.y = clientHeight / 2
+    this.resizeContainer.x = width / 2
+    this.resizeContainer.y = height / 2
 
-    this.resizeBackground({ width: clientWidth, height: clientHeight - this.ui.view.height })
+    this.resizeBackground({ width, height })
   }
 
-  public enableUI() {
-    this.ui.view.enable()
+  public get resizeDimensions() {
+    return {
+      width: this.resizeDiv.clientWidth,
+      height: this.resizeDiv.clientHeight,
+    }
   }
 
-  public set uiPlayCallback(callback: () => Promise<void>) {
-    this.ui.view.on('play', callback)
-  }
-
-  public set uiBankText(bank: number) {
-    this.ui.view.bank = bank
-  }
-
-  public set uiBetText(bet: number) {
-    this.ui.view.bet = bet
+  public get stage() {
+    return this.pixiApp.stage
   }
 }

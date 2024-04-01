@@ -1,57 +1,62 @@
 import { ConnectionModel } from '../../framework/app/connection/model'
-import { IGame } from '../../framework/app/game/interface'
-import { Stage } from './game/stage/controller'
-import { Game } from './game/controller'
+import { Stage } from './stage/controller'
+import { Game, GameProps } from './game/controller'
 import { Assets, Container } from 'pixi.js'
 import { GameView } from './game/view'
+import { UI } from './ui/controller'
 
-export class App<TGameController extends Game, TGameView extends GameView> {
-  private bank: number = 500
+interface AppProps<TGameController extends Game<TGameView>, TGameView extends GameView> {
+  gameControllerClass: new (props: GameProps<TGameView>) => TGameController
+  gameViewClass: new () => TGameView
+  gameId: number
+}
+
+export class App<TGameController extends Game<TGameView>, TGameView extends GameView> {
+  private connection
+  private bank: number
   private bet: number
+  private stage!: Stage
+  private ui!: UI
+  private game!: TGameController
 
-  constructor(props: {
-    gameControllerClass: new (props: IGame) => TGameController
-    gameViewClass: new () => TGameView
-    gameId: number
-  }) {
+  constructor(props: AppProps<TGameController, TGameView>) {
+    const { gameId } = props
+
+    this.connection = new ConnectionModel({ gameId })
+
+    const { bet, bank } = this.connection
+
+    this.bank = bank
+    this.bet = bet
+
+    this.bootSequence(props)
+  }
+
+  private async bootSequence(props: AppProps<TGameController, TGameView>) {
     const { gameControllerClass, gameViewClass, gameId } = props
-    const connection = new ConnectionModel({ gameId })
+    const { name, rules, rtp } = this.connection
 
-    const { name, rules, rtp } = connection
+    await this.loadAssetsFromManifest(gameId)
 
-    this.bet = connection.defaultBet
+    this.stage = new Stage({ name })
 
-    // Call the function to load assets
-    this.loadAssetsFromManifest(gameId).then(() => {
-      const stage = new Stage({ name })
+    await this.stage.view.appLoaded
+    const { resizeContainer } = this.stage.view
 
-      stage.view.appLoaded.then(() => {
-        const { resizeContainer } = stage.view
+    this.ui = new UI({ name })
 
-        stage.view.uiBankText = this.bank
-        stage.view.uiBetText = this.bet
+    this.updateUI()
 
-        const view = new gameViewClass()
-        const game = new gameControllerClass({ name, rules, rtp, view })
+    this.game = new gameControllerClass({ name, rules, rtp, viewClass: gameViewClass })
 
-        resizeContainer.addChild(game.view)
-        stage.view.handleResize()
+    resizeContainer.addChild(this.game.view)
+    this.stage.view.stage.addChild(this.ui.view)
 
-        stage.view.uiPlayCallback = async () => {
-          if (this.bank < this.bet) return
+    this.handleResize()
+    this.ui.view.on('play', async () => await this.play())
 
-          this.bank -= this.bet
-          stage.view.uiBankText = this.bank
-
-          const win = connection.win
-          await game.play({ win })
-
-          this.bank += win * this.bet
-          stage.view.uiBankText = this.bank
-          stage.view.enableUI()
-        }
-      })
-    })
+    const debouncedResizeHandler = this.debounce(() => this.handleResize(), 200)
+    window.addEventListener('resize', debouncedResizeHandler)
   }
 
   private async loadAssetsFromManifest(gameId: number) {
@@ -62,5 +67,48 @@ export class App<TGameController extends Game, TGameView extends GameView> {
 
     await Assets.init({ manifest })
     await Assets.loadBundle(gameId.toString())
+  }
+
+  private updateUI() {
+    this.ui.view.bank = this.bank
+    this.ui.view.bet = this.bet
+  }
+
+  private async play() {
+    if (this.bank < this.bet) return
+
+    const { win } = this.connection
+
+    this.bank -= this.bet
+    this.updateUI()
+
+    await this.ui.view.disable()
+    await this.game.play({ win })
+
+    this.bank += win * this.bet
+
+    this.updateUI()
+
+    this.ui.view.enable()
+  }
+
+  private debounce<T extends (...args: any[]) => void>(func: T, waitFor: number) {
+    let timeoutId: ReturnType<typeof setTimeout> | null = null
+
+    return function (this: ThisParameterType<T>, ...args: Parameters<T>) {
+      if (timeoutId) {
+        clearTimeout(timeoutId)
+      }
+      timeoutId = setTimeout(() => {
+        func.apply(this, args)
+      }, waitFor)
+    }
+  }
+
+  private handleResize() {
+    const { width, height } = this.stage.view.resizeDimensions
+
+    this.ui.view.handleResize({ width, height })
+    this.stage.view.handleResize({ width, height, offset: this.ui.view.height })
   }
 }

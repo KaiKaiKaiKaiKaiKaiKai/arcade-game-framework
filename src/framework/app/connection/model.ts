@@ -25,13 +25,17 @@ export class ConnectionModel {
     return this.database.payout[this.gameId]
   }
 
-  public get defaultBet(): number {
+  public get bank(): number {
+    return 500
+  }
+
+  public get bet(): number {
     return 10
   }
 
   public getNextBet(increase: boolean): number {
     const betLevels = [0.1, 0.2, 0.5, 1, 2, 5, 10, 20, 50, 100, 200, 500]
-    return betLevels[betLevels.indexOf(this.defaultBet) + (increase ? 1 : -1)]
+    return betLevels[betLevels.indexOf(this.bet) + (increase ? 1 : -1)]
   }
 
   public get win(): number {

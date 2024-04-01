@@ -1,19 +1,24 @@
-import { Container } from 'pixi.js'
-import { IGame } from '../../../framework/app/game/interface'
 import { GameView } from './view'
 
-export abstract class Game {
+export interface GameProps<TGameView> {
+  name: string
+  rules: string
+  rtp: string
+  viewClass: new () => TGameView
+}
+
+export abstract class Game<TGameView extends GameView> {
   protected name: string
   protected rules: string
   protected rtp: string
-  public view: GameView
+  public view: TGameView
 
-  constructor(props: IGame) {
+  constructor(props: GameProps<TGameView>) {
     this.name = props.name
     this.rules = props.rules
     this.rtp = props.rtp
-    this.view = props.view
+    this.view = new props.viewClass()
   }
 
-  public async play(props: { win: number }): Promise<void> {}
+  public abstract play(props: { win: number }): Promise<void>
 }
