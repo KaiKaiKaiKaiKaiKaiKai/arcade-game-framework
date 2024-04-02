@@ -98,7 +98,6 @@ export class App<TGameController extends Game<TGameView>, TGameView extends Game
   }
 
   private updateBet(increase: boolean) {
-    console.log('updateBet', increase)
     this.bet = this.connection.getNextBet(increase, this.bet)
 
     this.updateUI()
