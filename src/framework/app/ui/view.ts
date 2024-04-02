@@ -19,12 +19,12 @@ export class UIView extends Container {
 
     this.playButton = new Container()
 
-    this.increaseBet = new BetButton({ text: '+' })
-    this.decreaseBet = new BetButton({ text: '–' })
+    this.increaseBet = new BetButton({ text: '+', tint: 0x3eb489 })
+    this.decreaseBet = new BetButton({ text: '–', tint: 0xb43e50 })
 
     this.playBackground = Sprite.from(Texture.WHITE)
     this.playBackground.height = 50
-    this.playBackground.tint = 0x3eb489
+    this.playBackground.tint = 0x3e95b4
 
     this.betBackground = Sprite.from(Texture.WHITE)
     this.betBackground.height = 25

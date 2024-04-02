@@ -1,18 +1,20 @@
-import { Container, Sprite, Text, Texture } from 'pixi.js'
+import { ColorSource, Container, Sprite, Text, Texture } from 'pixi.js'
 
 export class BetButton extends Container {
   private background: Sprite
   private text: Text
 
-  constructor(props: { text: string }) {
+  constructor(props: { text: string; tint: ColorSource }) {
     super()
+
+    const { text, tint } = props
 
     this.background = Sprite.from(Texture.WHITE)
     this.background.height = 25
     this.background.width = 25
-    this.background.tint = 0xa1a1a1
+    this.background.tint = tint
 
-    this.text = new Text(props.text, { fill: 0x101010, fontSize: 15, fontWeight: 'bold' })
+    this.text = new Text(text, { fill: 0x101010, fontSize: 15, fontWeight: 'bold' })
 
     this.addChild(this.background)
     this.addChild(this.text)
