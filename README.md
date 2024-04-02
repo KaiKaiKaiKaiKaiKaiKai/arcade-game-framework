@@ -1,2 +1,2 @@
-# slot-game-framework
+# arcade-game-framework
  
