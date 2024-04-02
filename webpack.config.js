@@ -61,7 +61,7 @@ module.exports = (env) => {
                 assets: []
               };
             }
-            bundles[env.gameId].assets.push({
+            bundles[0].assets.push({
               alias: fileName.split('-')[0].replace(/^assets\//, ''),
               src: file.path.replace(/^auto\//, '') // Remove 'auto/' prefix from source path
             });

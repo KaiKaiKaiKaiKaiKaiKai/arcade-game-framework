@@ -5,7 +5,7 @@ export class CountupText extends Text {
   constructor(text: string, options: Partial<TextStyle>) {
     super(text, options)
 
-    this.anchor.set(0.5, 0)
+    this.anchor.set(0.5, 0.5)
   }
 
   public async countup(to: number, duration: number) {
