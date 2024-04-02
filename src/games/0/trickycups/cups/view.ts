@@ -6,7 +6,7 @@ export class Cups extends Container {
   private chosenCup: Sprite | null = null
   public winningCup: Sprite
 
-  constructor(props: { container: Container }) {
+  constructor() {
     super()
 
     this.zIndex = 2
@@ -20,8 +20,6 @@ export class Cups extends Container {
     }
 
     this.winningCup = this.cups[1]
-
-    props.container.addChild(this)
   }
 
   private async liftCup(cup: Sprite) {

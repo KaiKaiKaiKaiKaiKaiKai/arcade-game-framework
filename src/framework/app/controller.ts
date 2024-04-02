@@ -87,7 +87,7 @@ export class App<TGameController extends Game<TGameView>, TGameView extends Game
     this.handleResize()
 
     await this.ui.view.disable()
-    await this.game.play({ win })
+    await this.game.play({ win: win * this.bet })
 
     this.bank += win * this.bet
 
