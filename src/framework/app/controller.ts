@@ -53,7 +53,10 @@ export class App<TGameController extends Game<TGameView>, TGameView extends Game
     this.stage.view.stage.addChild(this.ui.view)
 
     this.handleResize()
+
     this.ui.view.on('play', async () => await this.play())
+    this.ui.view.on('increase-bet', () => this.updateBet(true))
+    this.ui.view.on('decrease-bet', () => this.updateBet(false))
 
     const debouncedResizeHandler = this.debounce(() => this.handleResize(), 200)
     window.addEventListener('resize', debouncedResizeHandler)
@@ -81,6 +84,7 @@ export class App<TGameController extends Game<TGameView>, TGameView extends Game
 
     this.bank -= this.bet
     this.updateUI()
+    this.handleResize()
 
     await this.ui.view.disable()
     await this.game.play({ win })
@@ -88,8 +92,17 @@ export class App<TGameController extends Game<TGameView>, TGameView extends Game
     this.bank += win * this.bet
 
     this.updateUI()
+    this.handleResize()
 
     this.ui.view.enable()
+  }
+
+  private updateBet(increase: boolean) {
+    console.log('updateBet', increase)
+    this.bet = this.connection.getNextBet(increase, this.bet)
+
+    this.updateUI()
+    this.handleResize()
   }
 
   private debounce<T extends (...args: any[]) => void>(func: T, waitFor: number) {

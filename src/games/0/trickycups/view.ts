@@ -78,7 +78,7 @@ export class TrickyCupsView extends GameView {
         cup.on('pointerdown', async () => {
           for (const cup of this.cups) {
             cup.interactive = false
-            cup.cursor = 'normal'
+            cup.cursor = 'default'
           }
 
           this.selectedCup = cup

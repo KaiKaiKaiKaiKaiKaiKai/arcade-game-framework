@@ -1,8 +1,11 @@
 import gsap from 'gsap'
 import { Container, Sprite, Text, Texture } from 'pixi.js'
+import { BetButton } from './bet-button/view'
 
 export class UIView extends Container {
   private playButton: Container
+  private increaseBet: BetButton
+  private decreaseBet: BetButton
   private playBackground: Sprite
   private nameBackground: Sprite
   private betBackground: Sprite
@@ -15,6 +18,9 @@ export class UIView extends Container {
     super()
 
     this.playButton = new Container()
+
+    this.increaseBet = new BetButton({ text: '+' })
+    this.decreaseBet = new BetButton({ text: '–' })
 
     this.playBackground = Sprite.from(Texture.WHITE)
     this.playBackground.height = 50
@@ -42,29 +48,43 @@ export class UIView extends Container {
     this.addChild(this.gameName)
     this.addChild(this.bankText)
     this.addChild(this.betText)
+    this.addChild(this.increaseBet)
+    this.addChild(this.decreaseBet)
 
     this.playButton.on('pointerdown', async () => {
-      await this.disable()
       this.emit('play')
     })
+
+    this.increaseBet.on('pointerdown', () => this.emit('increase-bet'))
+    this.decreaseBet.on('pointerdown', () => this.emit('decrease-bet'))
 
     this.enable()
   }
 
   public async enable(): Promise<void> {
-    await gsap.to(this.playButton, { alpha: 1, duration: 0.5 })
+    const buttons = [this.playButton, this.increaseBet, this.decreaseBet]
+
+    await gsap.to(buttons, { alpha: 1, duration: 0.5 })
 
     this.interactive = true
-    this.playButton.interactive = true
-    this.playButton.cursor = 'pointer'
+
+    for (const button of buttons) {
+      button.interactive = true
+      button.cursor = 'pointer'
+    }
   }
 
   public async disable(): Promise<void> {
-    this.interactive = false
-    this.playButton.interactive = false
-    this.playButton.cursor = 'normal'
+    const buttons = [this.playButton, this.increaseBet, this.decreaseBet]
 
-    await gsap.to(this.playButton, { alpha: 0.5, duration: 0.5 })
+    this.interactive = false
+
+    for (const button of buttons) {
+      button.interactive = false
+      button.cursor = 'default'
+    }
+
+    await gsap.to(buttons, { alpha: 0.5, duration: 0.5 })
   }
 
   public handleResize(props: { width: number; height: number }) {
@@ -88,6 +108,14 @@ export class UIView extends Container {
 
     this.betText.x = this.betBackground.x + this.betBackground.width / 2 + 10
     this.betText.y = this.betBackground.y + (this.betBackground.height - this.betText.height) / 2
+
+    this.increaseBet.x = this.betText.x + this.betText.width + 10
+    this.increaseBet.y =
+      this.betBackground.y + (this.betBackground.height - this.increaseBet.height) / 2
+
+    this.decreaseBet.x = this.increaseBet.x + this.increaseBet.width + 5
+    this.decreaseBet.y =
+      this.betBackground.y + (this.betBackground.height - this.decreaseBet.height) / 2
 
     this.y = props.height - this.height
   }

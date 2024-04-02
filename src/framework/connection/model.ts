@@ -33,9 +33,9 @@ export class ConnectionModel {
     return 10
   }
 
-  public getNextBet(increase: boolean): number {
+  public getNextBet(increase: boolean, currentBet: number): number {
     const betLevels = [0.1, 0.2, 0.5, 1, 2, 5, 10, 20, 50, 100, 200, 500]
-    return betLevels[betLevels.indexOf(this.bet) + (increase ? 1 : -1)]
+    return betLevels[betLevels.indexOf(currentBet) + (increase ? 1 : -1)] ?? currentBet
   }
 
   public get win(): number {
