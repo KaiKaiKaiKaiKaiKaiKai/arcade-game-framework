@@ -10,6 +10,7 @@ export class TrickyCupsView extends GameView {
   private ball!: Ball
   private cups: Cups
   private table: Table
+
   constructor() {
     super()
 
