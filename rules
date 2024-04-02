@@ -9,9 +9,11 @@ Controller, Model or View?
         Yes
           It's a View
 
+npm run dev -- --env gameId=0
+npm run build -- --env gameId=0
+
 TO DO:
-Resize background with UI offset
-Move decrease bet button inwards
-Added win popup to Tricky Cups
+Add win popup to Tricky Cups
 Do rest of the games
 DONE!!
+Sort out UI (last thing)

@@ -35,16 +35,17 @@ export class StageView {
       })
   }
 
-  private resizeBackground(props: { width: number; height: number }) {
+  private resizeBackground(props: { width: number; height: number; offset: number }) {
+    const { width, height, offset } = props
     const scale = Math.max(
-      props.width / this.background.texture.width,
-      props.height / this.background.texture.height
+      width / this.background.texture.width,
+      (height - offset) / this.background.texture.height
     )
 
     this.background.scale.set(scale)
 
-    this.background.x = (props.width - this.background.width) / 2
-    this.background.y = (props.height - this.background.height) / 2
+    this.background.x = (width - this.background.width) / 2
+    this.background.y = (height - offset - this.background.height) / 2
   }
 
   public handleResize(props: {
@@ -65,10 +66,10 @@ export class StageView {
 
     this.resizeContainer.scale.set(scale)
 
-    this.resizeContainer.x = width / 2 - this.resizeContainer.width / 2
-    this.resizeContainer.y = (height - offset) / 2 - this.resizeContainer.height / 2
+    this.resizeContainer.x = (width - this.resizeContainer.width) / 2
+    this.resizeContainer.y = (height - offset - this.resizeContainer.height) / 2
 
-    this.resizeBackground({ width, height })
+    this.resizeBackground({ width, height, offset })
   }
 
   public get resizeDimensions() {

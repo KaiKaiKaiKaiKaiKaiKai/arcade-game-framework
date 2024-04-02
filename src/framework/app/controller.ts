@@ -33,17 +33,17 @@ export class App<TGameController extends Game<TGameView>, TGameView extends Game
   }
 
   private async bootSequence(props: AppProps<TGameController, TGameView>) {
-    const { gameControllerClass, gameViewClass, gameId } = props
+    const { gameControllerClass, gameViewClass } = props
     const { name, rules, rtp } = this.connection
 
-    await this.loadAssetsFromManifest(gameId)
+    await this.loadAssetsFromManifest()
 
     this.stage = new Stage()
 
     await this.stage.view.appLoaded
     const { resizeContainer } = this.stage.view
 
-    this.ui = new UI({ name })
+    this.ui = new UI({ name, rtp })
 
     this.updateUI()
 
@@ -58,18 +58,18 @@ export class App<TGameController extends Game<TGameView>, TGameView extends Game
     this.ui.view.on('increase-bet', () => this.updateBet(true))
     this.ui.view.on('decrease-bet', () => this.updateBet(false))
 
-    const debouncedResizeHandler = this.debounce(() => this.handleResize(), 200)
+    const debouncedResizeHandler = this.debounce(() => this.handleResize(), 15)
     window.addEventListener('resize', debouncedResizeHandler)
   }
 
-  private async loadAssetsFromManifest(gameId: number) {
+  private async loadAssetsFromManifest() {
     const response = await fetch('assets-manifest.json')
     const data = await response.json()
 
     const manifest = JSON.parse(JSON.stringify(data))
 
     await Assets.init({ manifest })
-    await Assets.loadBundle(gameId.toString())
+    await Assets.loadBundle('main')
   }
 
   private updateUI() {

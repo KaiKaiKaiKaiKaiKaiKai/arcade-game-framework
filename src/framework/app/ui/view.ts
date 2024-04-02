@@ -6,6 +6,7 @@ export class UIView extends Container {
   private playButton: Container
   private increaseBet: BetButton
   private decreaseBet: BetButton
+  private playBackgroundBlack: Sprite
   private playBackground: Sprite
   private nameBackground: Sprite
   private betBackground: Sprite
@@ -14,13 +15,19 @@ export class UIView extends Container {
   private gameName: Text
   private playText: Text
 
-  constructor(props: { name: string }) {
+  constructor(props: { name: string; rtp: string }) {
     super()
+
+    const { name, rtp } = props
 
     this.playButton = new Container()
 
     this.increaseBet = new BetButton({ text: '+', tint: 0x3eb489 })
     this.decreaseBet = new BetButton({ text: '–', tint: 0xb43e50 })
+
+    this.playBackgroundBlack = Sprite.from(Texture.WHITE)
+    this.playBackgroundBlack.height = 50
+    this.playBackgroundBlack.tint = 0x101010
 
     this.playBackground = Sprite.from(Texture.WHITE)
     this.playBackground.height = 50
@@ -34,7 +41,7 @@ export class UIView extends Container {
     this.nameBackground.height = 25
     this.nameBackground.tint = 0x101010
 
-    this.gameName = new Text(props.name, { fill: 0xa1a1a1, fontSize: 15 })
+    this.gameName = new Text(`${name} | ${Number(rtp) * 100}%`, { fill: 0xa1a1a1, fontSize: 15 })
     this.playText = new Text('Play Round', { fill: 0x101010, fontWeight: 'bold', fontSize: 20 })
     this.bankText = new Text('', { fill: 0xffffff, fontSize: 15 })
     this.betText = new Text('', { fill: 0xffffff, fontSize: 15 })
@@ -42,6 +49,7 @@ export class UIView extends Container {
     this.playButton.addChild(this.playBackground)
     this.playButton.addChild(this.playText)
 
+    this.addChild(this.playBackgroundBlack)
     this.addChild(this.playButton)
     this.addChild(this.nameBackground)
     this.addChild(this.betBackground)
@@ -88,11 +96,16 @@ export class UIView extends Container {
   }
 
   public handleResize(props: { width: number; height: number }) {
-    this.betBackground.width = props.width
-    this.playBackground.width = props.width
-    this.nameBackground.width = props.width
+    const { width } = props
+
+    this.betBackground.width = width
+    this.playBackground.width = width
+    this.playBackgroundBlack.width = width
+    this.nameBackground.width = width
 
     this.playBackground.y = this.betBackground.height
+    this.playBackgroundBlack.y = this.playBackground.y
+
     this.nameBackground.y = this.playBackground.y + this.playBackground.height
     this.gameName.y =
       this.nameBackground.y + (this.nameBackground.height - this.gameName.height) / 2
@@ -103,19 +116,20 @@ export class UIView extends Container {
     this.playText.y =
       this.playBackground.y + (this.playBackground.height - this.playText.height) / 2
 
-    this.bankText.x = this.betBackground.x + this.betBackground.width / 2 - this.bankText.width - 10
-    this.bankText.y = this.betBackground.y + (this.betBackground.height - this.bankText.height) / 2
-
-    this.betText.x = this.betBackground.x + this.betBackground.width / 2 + 10
-    this.betText.y = this.betBackground.y + (this.betBackground.height - this.betText.height) / 2
-
-    this.increaseBet.x = this.betText.x + this.betText.width + 10
+    this.increaseBet.x =
+      this.betBackground.x + this.betBackground.width / 2 - this.increaseBet.width
     this.increaseBet.y =
       this.betBackground.y + (this.betBackground.height - this.increaseBet.height) / 2
 
-    this.decreaseBet.x = this.increaseBet.x + this.increaseBet.width + 5
+    this.decreaseBet.x = this.increaseBet.x + this.increaseBet.width
     this.decreaseBet.y =
       this.betBackground.y + (this.betBackground.height - this.decreaseBet.height) / 2
+
+    this.bankText.x = this.increaseBet.x - this.bankText.width - 10
+    this.bankText.y = this.betBackground.y + (this.betBackground.height - this.bankText.height) / 2
+
+    this.betText.x = this.decreaseBet.x + this.decreaseBet.width + 10
+    this.betText.y = this.betBackground.y + (this.betBackground.height - this.betText.height) / 2
 
     this.y = props.height - this.height
   }

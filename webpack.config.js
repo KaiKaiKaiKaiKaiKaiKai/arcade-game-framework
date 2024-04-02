@@ -37,6 +37,7 @@ module.exports = (env) => {
           { 
             from: path.resolve(__dirname, `src/games/${env.gameId}/assets`), 
             to: path.resolve(__dirname, 'dist/assets'), 
+            filter: (resourcePath) => /\.(png|jpg)$/i.test(resourcePath),
           }
         ],
       }),
@@ -54,9 +55,9 @@ module.exports = (env) => {
               return; // Skip files with extensions other than PNG or JPG
             }
             const fileName = file.name.replace(/\.[^/.]+$/, '');
-            if (!bundles[env.gameId]) {
-              bundles[env.gameId] = {
-                name: env.gameId,
+            if (!bundles[0]) {
+              bundles[0] = {
+                name: 'main',
                 assets: []
               };
             }
