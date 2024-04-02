@@ -10,6 +10,8 @@ Controller, Model or View?
           It's a View
 
 TO DO:
-BIG UI CLEANUP
-BIG GAME CLEANUP
-FINISH BETTING SYSTEM
+Resize background with UI offset
+Move decrease bet button inwards
+Added win popup to Tricky Cups
+Do rest of the games
+DONE!!
