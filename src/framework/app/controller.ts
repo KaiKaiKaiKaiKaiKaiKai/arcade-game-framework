@@ -38,6 +38,8 @@ export class App<TGameController extends Game<TGameView>, TGameView extends Game
 
     await this.loadAssetsFromManifest()
 
+    document.title = `Kai's ${name}`
+
     this.stage = new Stage()
 
     await this.stage.view.appLoaded
