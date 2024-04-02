@@ -4,31 +4,31 @@ export class StageView {
   public appLoaded: Promise<void>
   private pixiApp: Application
   public resizeContainer: Container
-  private resizeDiv: HTMLDivElement
   private background: Sprite
 
   constructor() {
-    this.resizeDiv = document.createElement('div')
-
-    this.resizeDiv.style.width = '100%'
-    this.resizeDiv.style.height = '100%'
-    this.resizeDiv.style.overflow = 'hidden'
-
-    document.body.appendChild(this.resizeDiv)
-
     this.resizeContainer = new Container()
     this.background = new Sprite(Texture.from('background'))
 
     this.pixiApp = new Application()
+
     this.appLoaded = this.pixiApp
       .init({
-        width: this.resizeDiv.clientWidth,
-        height: this.resizeDiv.clientHeight,
+        width: window.innerWidth,
+        height: window.innerHeight,
+        resolution: window.devicePixelRatio || 1,
       })
       .then(() => {
         ;(globalThis as any).__PIXI_APP__ = this.pixiApp
 
-        this.resizeDiv.appendChild(this.pixiApp.canvas)
+        document.body.appendChild(this.pixiApp.canvas)
+
+        this.pixiApp.canvas.style.position = 'absolute'
+        this.pixiApp.canvas.style.display = 'block'
+        this.pixiApp.canvas.style.width = '100%'
+        this.pixiApp.canvas.style.height = '100%'
+        this.pixiApp.canvas.style.top = '0'
+        this.pixiApp.canvas.style.left = '0'
 
         this.pixiApp.stage.addChild(this.background)
         this.pixiApp.stage.addChild(this.resizeContainer)
@@ -73,8 +73,8 @@ export class StageView {
 
   public get resizeDimensions() {
     return {
-      width: this.resizeDiv.clientWidth,
-      height: this.resizeDiv.clientHeight,
+      width: window.innerWidth,
+      height: window.innerHeight,
     }
   }
 

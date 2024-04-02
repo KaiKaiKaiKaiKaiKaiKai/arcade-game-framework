@@ -30,10 +30,8 @@ module.exports = (env) => {
             from: path.resolve(__dirname, 'src', 'index.html'), 
             to: path.resolve(__dirname, 'dist'),
             transform(content) {
-              const loadScript = `
-                <script src='game.${env.gameId}.js'></script>
-              `;
-              return content.toString().replace('</body>', `${loadScript}</body>`);
+              const loadScript = `\t<script src='game.${env.gameId}.js'></script>`;
+              return content.toString().replace('</body>', `${loadScript}\n</body>`);
             }
           },
           { 
