@@ -13,7 +13,7 @@ npm run dev -- --env gameId=0
 npm run build -- --env gameId=0
 
 TO DO:
-Continue with Higher or Lower
+Sort out win text styling and anchors on cards on higher or lower then done!!
 Start Bombs Away
 DONE!!
 Sort out UI (last thing)
