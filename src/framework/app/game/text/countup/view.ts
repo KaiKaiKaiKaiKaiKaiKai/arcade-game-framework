@@ -15,6 +15,11 @@ export class CountupText extends Text {
       duration,
       onUpdate: () => {
         count += to / 60 / duration
+
+        if (count > to) {
+          count = to
+        }
+
         this.text = `FUN${parseFloat(count.toString()).toFixed(2)}`
       },
       onComplete: () => {
