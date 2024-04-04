@@ -27,6 +27,11 @@ export class Card extends Container {
     bottomText.x = front.width - bottomText.width - 10
     bottomText.y = front.height - bottomText.height
 
+    this.pivot = {
+      x: front.width / 2,
+      y: 0,
+    }
+
     this.addChild(front)
     this.addChild(suitSprite)
     this.addChild(topText)
@@ -34,21 +39,26 @@ export class Card extends Container {
     this.addChild(this.back)
   }
 
-  public async reveal() {
+  public async reveal(x: number) {
     const oldY = this.y
+    const oldX = this.x
 
     const newHeight = this.height * 2
     const newY = this.y - newHeight / 4
 
-    gsap.to(this, { y: newY, duration: 0.5 })
+    gsap.to(this, { x, y: newY, duration: 0.5 })
 
     await gsap.to(this.scale, { x: 2, y: 2, duration: 0.5, ease: 'back.out' })
     await gsap.to(this, { duration: 0.5 })
     await gsap.to(this.back, { alpha: 0, duration: 0.5 })
     await gsap.to(this, { duration: 0.5 })
 
-    gsap.to(this, { y: oldY, duration: 0.5 })
+    gsap.to(this, { x: oldX, y: oldY, duration: 0.5 })
 
     await gsap.to(this.scale, { x: 1, y: 1, duration: 0.5, ease: 'back.in' })
+  }
+
+  public async hide() {
+    await gsap.to(this.back, { alpha: 1, duration: 0.5 })
   }
 }

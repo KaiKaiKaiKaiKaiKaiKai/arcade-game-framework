@@ -1,5 +1,5 @@
 import gsap from 'gsap'
-import { Text, TextStyle } from 'pixi.js'
+import { Text, TextStyle, Ticker } from 'pixi.js'
 
 export class CountupText extends Text {
   constructor(text: string, options: Partial<TextStyle>) {
@@ -14,7 +14,7 @@ export class CountupText extends Text {
     await gsap.to(this, {
       duration,
       onUpdate: () => {
-        count += to / 60 / duration
+        count += to / Ticker.shared.FPS / duration
 
         if (count > to) {
           count = to

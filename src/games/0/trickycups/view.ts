@@ -36,7 +36,7 @@ export class TrickyCupsView extends GameView {
   private async showWin(win: number) {
     gsap.to(this.winText.scale, { x: 2, y: 2, duration: 1, ease: 'back.out' })
 
-    await this.winText.countup(win, 5)
+    await this.winText.countup(win, 2)
     await gsap.to(this, { duration: 1 })
     await gsap.to(this.winText.scale, { x: 0, y: 0, duration: 1, ease: 'back.in' })
   }

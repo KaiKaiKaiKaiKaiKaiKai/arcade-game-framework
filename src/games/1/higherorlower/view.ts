@@ -34,13 +34,29 @@ export class HigherOrLowerView extends GameView {
     this.pileRight = new Sprite(Texture.from('cardBack'))
     ;(this.pileLeft.zIndex = 2), (this.pileRight.zIndex = 2)
 
-    this.pileLeft.x = this.table.width / 2 - this.pileLeft.width
-    this.pileRight.x = this.table.width / 2
+    this.pileLeft.pivot = {
+      x: this.pileLeft.width / 2,
+      y: 0,
+    }
+
+    this.pileRight.pivot = {
+      x: this.pileRight.width / 2,
+      y: 0,
+    }
+
+    this.pileLeft.x = this.table.width / 2 - this.pileLeft.width / 2 - 25
+    this.pileRight.x = this.table.width / 2 + this.pileRight.width / 2 + 25
 
     this.pileLeft.y = this.table.height / 2 - this.pileLeft.height / 2
     this.pileRight.y = this.table.height / 2 - this.pileRight.height / 2
 
-    this.winText = new CountupText('0', { fill: 0xffffff, fontSize: 80 })
+    this.winText = new CountupText('0', {
+      dropShadow: { angle: 1.5, alpha: 0.8, blur: 10, color: '#000000', distance: 0 },
+      fill: '#ffffff',
+      fontSize: 80,
+      fontWeight: 'bold',
+    })
+
     this.winText.zIndex = 4
     this.winText.x = this.table.width / 2
     this.winText.y = this.table.height / 2
@@ -67,7 +83,7 @@ export class HigherOrLowerView extends GameView {
   private async showWin(win: number) {
     gsap.to(this.winText.scale, { x: 2, y: 2, duration: 1, ease: 'back.out' })
 
-    await this.winText.countup(win, 5)
+    await this.winText.countup(win, 2)
     await gsap.to(this, { duration: 1 })
     await gsap.to(this.winText.scale, { x: 0, y: 0, duration: 1, ease: 'back.in' })
   }
@@ -121,6 +137,21 @@ export class HigherOrLowerView extends GameView {
   public async play(props: { win: number }): Promise<void> {
     const { win } = props
 
+    let oldCardPromises: Array<Promise<void>> = []
+
+    if (this.houseCard) {
+      oldCardPromises.push(this.houseCard.hide())
+    }
+
+    if (this.userCard) {
+      oldCardPromises.push(this.userCard.hide())
+    }
+
+    if (oldCardPromises.length) {
+      await Promise.all(oldCardPromises)
+      await gsap.to(this, { duration: 0.5 })
+    }
+
     const houseCardValue = this.values[Math.floor(Math.random() * this.values.length)]
     const houseCardSuit = this.suits[Math.floor(Math.random() * this.suits.length)]
 
@@ -134,7 +165,7 @@ export class HigherOrLowerView extends GameView {
 
     this.addChild(houseCard)
 
-    await houseCard.reveal()
+    await houseCard.reveal(this.table.width / 2)
 
     if (this.houseCard) {
       this.houseCard.destroy()
@@ -168,7 +199,7 @@ export class HigherOrLowerView extends GameView {
 
     this.addChild(userCard)
 
-    await userCard.reveal()
+    await userCard.reveal(this.table.width / 2)
 
     if (this.userCard) {
       this.userCard.destroy()
