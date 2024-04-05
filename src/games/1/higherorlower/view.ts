@@ -1,13 +1,13 @@
 import gsap from 'gsap'
-import { CountupText } from '../../../framework/app/game/text/countup/view'
 import { GameView } from '../../../framework/app/game/view'
 import { Table } from './table/view'
 import { Card } from './card/view'
 import { Sprite, Texture } from 'pixi.js'
 import { Button } from './button/view'
+import { WinText } from '../../../framework/app/game/text/win/view'
 
 export class HigherOrLowerView extends GameView {
-  private winText: CountupText
+  private winText: WinText
   private table: Table
   private values: Array<string>
   private suits: Array<string>
@@ -32,7 +32,9 @@ export class HigherOrLowerView extends GameView {
 
     this.pileLeft = new Sprite(Texture.from('cardBack'))
     this.pileRight = new Sprite(Texture.from('cardBack'))
-    ;(this.pileLeft.zIndex = 2), (this.pileRight.zIndex = 2)
+
+    this.pileLeft.zIndex = 2
+    this.pileRight.zIndex = 2
 
     this.pileLeft.pivot = {
       x: this.pileLeft.width / 2,
@@ -50,17 +52,11 @@ export class HigherOrLowerView extends GameView {
     this.pileLeft.y = this.table.height / 2 - this.pileLeft.height / 2
     this.pileRight.y = this.table.height / 2 - this.pileRight.height / 2
 
-    this.winText = new CountupText('0', {
-      dropShadow: { angle: 1.5, alpha: 0.8, blur: 10, color: '#000000', distance: 0 },
-      fill: '#ffffff',
-      fontSize: 80,
-      fontWeight: 'bold',
-    })
+    this.winText = new WinText()
 
     this.winText.zIndex = 4
     this.winText.x = this.table.width / 2
     this.winText.y = this.table.height / 2
-    this.winText.scale.set(0)
 
     this.higherButton = new Button({ text: '▲' })
     this.higherButton.x = this.table.width / 2 - this.higherButton.width / 2
@@ -78,14 +74,6 @@ export class HigherOrLowerView extends GameView {
     this.addChild(this.higherButton)
     this.addChild(this.lowerButton)
     this.addChild(this.winText)
-  }
-
-  private async showWin(win: number) {
-    gsap.to(this.winText.scale, { x: 2, y: 2, duration: 1, ease: 'back.out' })
-
-    await this.winText.countup(win, 2)
-    await gsap.to(this, { duration: 1 })
-    await gsap.to(this.winText.scale, { x: 0, y: 0, duration: 1, ease: 'back.in' })
   }
 
   private async userSelection() {
@@ -180,14 +168,21 @@ export class HigherOrLowerView extends GameView {
 
     await this.userSelection()
 
-    const higherValues = this.values.slice(this.values.indexOf(houseCardValue) + 1)
-    const lowerValues = this.values.slice(0, this.values.indexOf(houseCardValue))
+    const higherValues = this.values.slice(this.values.indexOf(houseCardValue))
+    const lowerValues = this.values.slice(0, this.values.indexOf(houseCardValue) + 1)
 
     const higher = (this.choseHigher && win) || (!this.choseHigher && !win)
 
     const userValues = higher ? higherValues : lowerValues
     const userCardValue = userValues[Math.floor(Math.random() * userValues.length)]
-    const userCardSuit = this.suits[Math.floor(Math.random() * this.suits.length)]
+
+    let userSuits = [...this.suits]
+
+    if (userCardValue === houseCardValue) {
+      userSuits = userSuits.filter((suit) => suit !== houseCardSuit)
+    }
+
+    const userCardSuit = userSuits[Math.floor(Math.random() * userSuits.length)]
 
     const userCard = new Card({
       value: userCardValue,
@@ -207,8 +202,13 @@ export class HigherOrLowerView extends GameView {
 
     this.userCard = userCard
 
+    if (houseCardValue === userCardValue) {
+      await gsap.to(this, { duration: 1 })
+      return this.play({ win })
+    }
+
     if (win) {
-      await this.showWin(win)
+      await this.winText.showWin(win)
     }
   }
 }

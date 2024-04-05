@@ -2,11 +2,10 @@ import { Cups } from './cups/view'
 import { Ball } from './ball/view'
 import { GameView } from '../../../framework/app/game/view'
 import { Table } from './table/view'
-import { CountupText } from '../../../framework/app/game/text/countup/view'
-import gsap from 'gsap'
+import { WinText } from '../../../framework/app/game/text/win/view'
 
 export class TrickyCupsView extends GameView {
-  private winText: CountupText
+  private winText: WinText
   private ball!: Ball
   private cups: Cups
   private table: Table
@@ -22,23 +21,14 @@ export class TrickyCupsView extends GameView {
     this.cups = new Cups()
     this.cups.x = this.table.width / 2 - this.cups.width / 2
 
-    this.winText = new CountupText('0', { fill: 0xffffff, fontSize: 80 })
+    this.winText = new WinText()
     this.winText.zIndex = 3
     this.winText.x = this.table.width / 2
     this.winText.y = this.table.y + this.table.height / 2
-    this.winText.scale.set(0)
 
     this.addChild(this.table)
     this.addChild(this.cups)
     this.addChild(this.winText)
-  }
-
-  private async showWin(win: number) {
-    gsap.to(this.winText.scale, { x: 2, y: 2, duration: 1, ease: 'back.out' })
-
-    await this.winText.countup(win, 2)
-    await gsap.to(this, { duration: 1 })
-    await gsap.to(this.winText.scale, { x: 0, y: 0, duration: 1, ease: 'back.in' })
   }
 
   private async userSelection(win: number) {
@@ -74,7 +64,7 @@ export class TrickyCupsView extends GameView {
     if (!win) {
       await this.cups.liftWinningCup()
     } else {
-      await this.showWin(win)
+      await this.winText.showWin(win)
     }
 
     this.ball.destroy()

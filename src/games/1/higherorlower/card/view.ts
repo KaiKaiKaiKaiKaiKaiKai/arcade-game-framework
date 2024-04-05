@@ -50,7 +50,9 @@ export class Card extends Container {
 
     await gsap.to(this.scale, { x: 2, y: 2, duration: 0.5, ease: 'back.out' })
     await gsap.to(this, { duration: 0.5 })
-    await gsap.to(this.back, { alpha: 0, duration: 0.5 })
+
+    await this.flip()
+
     await gsap.to(this, { duration: 0.5 })
 
     gsap.to(this, { x: oldX, y: oldY, duration: 0.5 })
@@ -60,5 +62,13 @@ export class Card extends Container {
 
   public async hide() {
     await gsap.to(this.back, { alpha: 1, duration: 0.5 })
+  }
+
+  public async flip() {
+    await gsap.to(this.scale, { x: 0, duration: 0.2, ease: 'sine.in' })
+
+    this.back.alpha = 0
+
+    await gsap.to(this.scale, { x: 2, duration: 0.2, ease: 'sine.out' })
   }
 }
