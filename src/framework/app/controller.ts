@@ -60,7 +60,7 @@ export class App<TGameController extends Game<TGameView>, TGameView extends Game
     this.ui.view.on('increase-bet', () => this.updateBet(true))
     this.ui.view.on('decrease-bet', () => this.updateBet(false))
 
-    const debouncedResizeHandler = this.debounce(() => this.handleResize(), 16)
+    const debouncedResizeHandler = this.debounce(() => this.handleResize(), 0)
     window.addEventListener('resize', debouncedResizeHandler)
   }
 
