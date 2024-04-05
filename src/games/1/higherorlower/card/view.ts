@@ -13,12 +13,14 @@ export class Card extends Container {
     const suitSprite = new Sprite(Texture.from(suit))
     this.back = new Sprite(Texture.from('cardBack'))
 
-    const topText = new Text(value, { fill: 0x000000, fontSize: 80 })
-    const bottomText = new Text(value, { fill: 0x000000, fontSize: 80 })
+    const topText = new Text(value, { fill: 0x000000, fontSize: 40 })
+    const bottomText = new Text(value, { fill: 0x000000, fontSize: 40 })
+
+    topText.scale.set(2)
+    bottomText.scale.set(-2)
 
     topText.x += 10
 
-    bottomText.scale.set(-1)
     bottomText.anchor.set(1)
 
     suitSprite.x = front.width / 2 - suitSprite.width / 2
