@@ -11,7 +11,7 @@ export class WinText extends CountupText {
       fontWeight: 'bold',
     }
 
-    super('FUN0.00', style)
+    super({ options: style, fixed: 2, prefix: 'FUN' })
 
     this.scale.set(0)
     this.visible = false

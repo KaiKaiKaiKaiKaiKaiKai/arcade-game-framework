@@ -96,8 +96,8 @@ export class HigherOrLowerView extends GameView {
 
     await selectionPromise
 
-    this.higherButton.removeAllListeners()
-    this.lowerButton.removeAllListeners()
+    this.higherButton.removeAllListeners('pointerdown')
+    this.lowerButton.removeAllListeners('pointerdown')
 
     await this.disableButtons()
   }

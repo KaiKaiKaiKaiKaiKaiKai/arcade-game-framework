@@ -88,7 +88,7 @@ export class Cups extends Container {
     await selectionPromise
 
     for (const cup of this.cups) {
-      cup.removeAllListeners()
+      cup.removeAllListeners('pointerdown')
 
       cup.interactive = false
       cup.cursor = 'default'
