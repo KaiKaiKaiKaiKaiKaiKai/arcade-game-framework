@@ -5,6 +5,7 @@ export class CountupText extends Text {
   private value = 0
   private fixed: number
   private prefix: string
+  protected countupTween!: gsap.core.Tween
 
   constructor(props: { options: Partial<TextStyle>; fixed: number; prefix: string }) {
     const { options, fixed, prefix } = props
@@ -18,7 +19,7 @@ export class CountupText extends Text {
   }
 
   public async countup(to: number, duration: number) {
-    await gsap.to(this, {
+    this.countupTween = gsap.to(this, {
       duration,
       value: to,
       ease: 'sine.inOut',
@@ -29,5 +30,7 @@ export class CountupText extends Text {
         this.value = 0
       },
     })
+
+    await this.countupTween
   }
 }

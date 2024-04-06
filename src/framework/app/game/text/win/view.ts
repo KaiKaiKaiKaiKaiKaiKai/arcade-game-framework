@@ -21,7 +21,15 @@ export class WinText extends CountupText {
     this.visible = true
     gsap.to(this.scale, { x: 2, y: 2, duration: 1, ease: 'back.out' })
 
-    await this.countup(win, 2)
+    this.countup(win, 2)
+
+    window.addEventListener('click', () => {
+      window.removeEventListener('click', () => {})
+
+      this.countupTween.seek(1.99)
+    })
+
+    await this.countupTween
     await gsap.to(this, { duration: 1 })
     await gsap.to(this.scale, { x: 0, y: 0, duration: 1, ease: 'back.in' })
 
