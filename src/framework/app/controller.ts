@@ -98,12 +98,12 @@ export class App<TGameController extends Game<TGameView>, TGameView extends Game
 
     this.bank += win * this.bet
 
-    this.updateUI()
-    this.handleResize()
-
     if (win) {
       await this.winText.showWin(win * this.bet)
     }
+
+    this.updateUI()
+    this.handleResize()
 
     this.ui.view.enable()
   }
