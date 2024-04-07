@@ -16,9 +16,9 @@ export class Button extends Container {
     background.tint = 0x3e95b4
     background.zIndex = 0
 
-    const label = new Text(text, { fill: 0x101010, fontSize: 50, fontWeight: 'bold' })
+    const label = new Text(text, { fill: 0x101010, fontSize: 100, fontWeight: 'bold' })
 
-    label.scale.set(2)
+    label.scale.set(1)
     label.x = (background.width - label.width) / 2
     label.y = (background.height - label.height) / 2
     label.zIndex = 1

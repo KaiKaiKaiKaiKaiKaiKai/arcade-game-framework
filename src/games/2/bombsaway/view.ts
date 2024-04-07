@@ -1,19 +1,21 @@
 import { GameView } from '../../../framework/app/game/view'
 import { WinText } from '../../../framework/app/game/text/win/view'
 import { TimerButton } from './timer-button/view'
-import { Sprite, Texture } from 'pixi.js'
+import { Container, Sprite, Texture } from 'pixi.js'
 import { Bomb } from './bomb/view'
 
 export class BombsAwayView extends GameView {
-  private winText: WinText
-  private timeOptions: Array<number>
-  private timeButtons: Array<TimerButton> = []
-  private bomb: Bomb
+  private timeOptions!: Array<number>
+  private timeButtons!: Array<TimerButton>
+  private timeButtonContainer!: Container
+  private bomb!: Bomb
   private selectedTime!: number
 
   constructor() {
     super()
+  }
 
+  protected createInitial() {
     this.scaleFactor = 0.9
     this.sortableChildren = true
 
@@ -21,17 +23,18 @@ export class BombsAwayView extends GameView {
     this.bomb.zIndex = 2
 
     this.timeOptions = [1, 2, 3, 4, 5]
+    this.timeButtonContainer = new Container()
+
+    this.timeButtons = []
 
     for (let i = 0; i < this.timeOptions.length; i++) {
-      this.timeButtons.push(new TimerButton({ text: `${this.timeOptions[i]}s`, duration: 1 }))
+      this.timeButtons.push(new TimerButton({ text: this.timeOptions[i].toString(), duration: 1 }))
 
       const timeButton = this.timeButtons[i]
 
-      timeButton.y = (timeButton.height + 20) * i
-      timeButton.x = this.bomb.width / 2 + 5
-      timeButton.zIndex = 1
+      timeButton.y = (timeButton.height + 30) * i
 
-      this.addChild(timeButton)
+      this.timeButtonContainer.addChild(timeButton)
     }
 
     const height =
@@ -41,14 +44,12 @@ export class BombsAwayView extends GameView {
     this.bomb.y = height
     this.bomb.wireLength = height
 
-    this.winText = new WinText()
-    this.winText.zIndex = 3
+    this.timeButtonContainer.scale.set(0.94)
+    this.timeButtonContainer.y = 22
+    this.timeButtonContainer.x = this.bomb.width / 2 + 25
 
+    this.addChild(this.timeButtonContainer)
     this.addChild(this.bomb)
-    this.addChild(this.winText)
-
-    this.winText.x = this.width / 2
-    this.winText.y = this.height / 2
   }
 
   private async startTimers(time: number) {
@@ -117,9 +118,5 @@ export class BombsAwayView extends GameView {
     await Promise.all([this.bomb.startTimer(time), this.startTimers(time)])
 
     await this.bomb.explode()
-
-    if (win) {
-      await this.winText.showWin(win)
-    }
   }
 }

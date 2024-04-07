@@ -3,26 +3,26 @@ import { GameView } from '../../../framework/app/game/view'
 import { Table } from './table/view'
 import { Card } from './card/view'
 import { Sprite, Texture } from 'pixi.js'
-import { WinText } from '../../../framework/app/game/text/win/view'
 import { Button } from '../../../framework/app/game/button/view'
 
 export class HigherOrLowerView extends GameView {
-  private winText: WinText
-  private table: Table
-  private values: Array<string>
-  private suits: Array<string>
-  private pileLeft: Sprite
-  private pileRight: Sprite
-  private higherButton: Button
-  private lowerButton: Button
+  private table!: Table
+  private values!: Array<string>
+  private suits!: Array<string>
+  private pileLeft!: Sprite
+  private pileRight!: Sprite
+  private higherButton!: Button
+  private lowerButton!: Button
   private choseHigher!: Boolean
   private houseCard!: Card
   private userCard!: Card
 
   constructor() {
     super()
+  }
 
-    this.scaleFactor = 0.95
+  protected createInitial() {
+    this.scaleFactor = 1
     this.sortableChildren = true
 
     this.values = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A']
@@ -52,12 +52,6 @@ export class HigherOrLowerView extends GameView {
     this.pileLeft.y = this.table.height / 2 - this.pileLeft.height / 2
     this.pileRight.y = this.table.height / 2 - this.pileRight.height / 2
 
-    this.winText = new WinText()
-
-    this.winText.zIndex = 4
-    this.winText.x = this.table.width / 2
-    this.winText.y = this.table.height / 2
-
     this.higherButton = new Button({ text: '▲' })
     this.higherButton.x = this.table.width / 2 - this.higherButton.width / 2
     this.higherButton.y = this.pileLeft.y - this.higherButton.height - 50
@@ -73,7 +67,6 @@ export class HigherOrLowerView extends GameView {
     this.addChild(this.pileRight)
     this.addChild(this.higherButton)
     this.addChild(this.lowerButton)
-    this.addChild(this.winText)
   }
 
   private async userSelection() {
@@ -193,10 +186,6 @@ export class HigherOrLowerView extends GameView {
     if (houseCardValue === userCardValue) {
       await gsap.to(this, { duration: 1 })
       return this.play({ win })
-    }
-
-    if (win) {
-      await this.winText.showWin(win)
     }
   }
 }

@@ -4,6 +4,7 @@ import { Game, GameProps } from './game/controller'
 import { Assets } from 'pixi.js'
 import { GameView } from './game/view'
 import { UI } from './ui/controller'
+import { WinText } from './game/text/win/view'
 
 interface AppProps<TGameController extends Game<TGameView>, TGameView extends GameView> {
   gameControllerClass: new (props: GameProps<TGameView>) => TGameController
@@ -18,6 +19,7 @@ export class App<TGameController extends Game<TGameView>, TGameView extends Game
   private stage!: Stage
   private ui!: UI
   private game!: TGameController
+  private winText!: WinText
 
   constructor(props: AppProps<TGameController, TGameView>) {
     const { gameId } = props
@@ -50,8 +52,11 @@ export class App<TGameController extends Game<TGameView>, TGameView extends Game
     this.updateUI()
 
     this.game = new gameControllerClass({ name, rules, rtp, viewClass: gameViewClass })
+    this.winText = new WinText()
 
     resizeContainer.addChild(this.game.view)
+
+    this.stage.view.stage.addChild(this.winText)
     this.stage.view.stage.addChild(this.ui.view)
 
     this.handleResize()
@@ -96,6 +101,10 @@ export class App<TGameController extends Game<TGameView>, TGameView extends Game
     this.updateUI()
     this.handleResize()
 
+    if (win) {
+      await this.winText.showWin(win * this.bet)
+    }
+
     this.ui.view.enable()
   }
 
@@ -124,6 +133,7 @@ export class App<TGameController extends Game<TGameView>, TGameView extends Game
     const { scaleFactor } = this.game.view
 
     this.ui.view.handleResize({ width, height })
+    this.winText.handleResize({ width, height, offset: this.ui.view.height })
     this.stage.view.handleResize({ width, height, offset: this.ui.view.height, scaleFactor })
   }
 }

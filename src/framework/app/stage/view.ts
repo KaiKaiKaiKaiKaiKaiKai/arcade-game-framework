@@ -3,7 +3,7 @@ import { Application, Container, Sprite, Texture } from 'pixi.js'
 export class StageView {
   public appLoaded: Promise<void>
   private pixiApp: Application
-  public resizeContainer: Container
+  public resizeContainer: Container & { initialWidth?: number; initialHeight?: number }
   private background: Sprite
 
   constructor() {
@@ -57,17 +57,19 @@ export class StageView {
     const { width, height, offset, scaleFactor } = props
     this.pixiApp.renderer.resize(width, height)
 
-    const scale =
-      Math.min(
-        width / this.resizeContainer.getLocalBounds().width,
-        (height - offset) / this.resizeContainer.getLocalBounds().height,
-        1
-      ) * scaleFactor
+    if (!(this.resizeContainer.initialWidth && this.resizeContainer.initialHeight)) {
+      this.resizeContainer.initialWidth = this.resizeContainer.width
+      this.resizeContainer.initialHeight = this.resizeContainer.height
+    }
+
+    const { initialWidth, initialHeight } = this.resizeContainer
+
+    const scale = Math.min(width / initialWidth, (height - offset) / initialHeight, 1) * scaleFactor
 
     this.resizeContainer.scale.set(scale)
 
-    this.resizeContainer.x = (width - this.resizeContainer.width) / 2
-    this.resizeContainer.y = (height - offset - this.resizeContainer.height) / 2
+    this.resizeContainer.x = width / 2
+    this.resizeContainer.y = (height - offset) / 2
 
     this.resizeBackground({ width, height, offset })
   }

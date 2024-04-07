@@ -17,11 +17,11 @@ export class Bomb extends Container {
     this.bomb = Sprite.from('bomb')
 
     this.backWire = Sprite.from(Texture.WHITE)
-    this.backWire.tint = 0xb43e50
+    this.backWire.tint = 0xe8d1a1
     this.backWire.alpha = 0.5
 
     this.wire = Sprite.from(Texture.WHITE)
-    this.wire.tint = 0xb43e50
+    this.wire.tint = 0xe8d1a1
     this.wire.height = 1
     this.wire.width = 10
     this.wire.x = this.bomb.width / 2 - this.wire.width / 2

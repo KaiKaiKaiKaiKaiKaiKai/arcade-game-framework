@@ -2,18 +2,18 @@ import { Cups } from './cups/view'
 import { Ball } from './ball/view'
 import { GameView } from '../../../framework/app/game/view'
 import { Table } from './table/view'
-import { WinText } from '../../../framework/app/game/text/win/view'
 
 export class TrickyCupsView extends GameView {
-  private winText: WinText
   private ball!: Ball
-  private cups: Cups
-  private table: Table
+  private cups!: Cups
+  private table!: Table
 
   constructor() {
     super()
+  }
 
-    this.scaleFactor = 0.8
+  protected createInitial() {
+    this.scaleFactor = 0.95
     this.sortableChildren = true
 
     this.table = new Table()
@@ -21,14 +21,8 @@ export class TrickyCupsView extends GameView {
     this.cups = new Cups()
     this.cups.x = this.table.width / 2 - this.cups.width / 2
 
-    this.winText = new WinText()
-    this.winText.zIndex = 3
-    this.winText.x = this.table.width / 2
-    this.winText.y = this.table.y + this.table.height / 2
-
     this.addChild(this.table)
     this.addChild(this.cups)
-    this.addChild(this.winText)
   }
 
   private async userSelection(win: number) {
@@ -63,8 +57,6 @@ export class TrickyCupsView extends GameView {
 
     if (!win) {
       await this.cups.liftWinningCup()
-    } else {
-      await this.winText.showWin(win)
     }
 
     this.ball.destroy()
