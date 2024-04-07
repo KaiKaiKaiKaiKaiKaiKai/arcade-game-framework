@@ -13,8 +13,6 @@ npm run dev -- --env gameId=0
 npm run build -- --env gameId=0
 
 TO DO:
-Clean up higher or lower
-Start Bombs Away
 DONE!!
-Sort out UI (last thing)
+Clean up UI (last thing)
 Add comments

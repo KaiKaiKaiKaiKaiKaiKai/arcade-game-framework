@@ -3,8 +3,8 @@ import { GameView } from '../../../framework/app/game/view'
 import { Table } from './table/view'
 import { Card } from './card/view'
 import { Sprite, Texture } from 'pixi.js'
-import { Button } from './button/view'
 import { WinText } from '../../../framework/app/game/text/win/view'
+import { Button } from '../../../framework/app/game/button/view'
 
 export class HigherOrLowerView extends GameView {
   private winText: WinText
@@ -103,23 +103,11 @@ export class HigherOrLowerView extends GameView {
   }
 
   private async enableButtons() {
-    await gsap.to([this.higherButton, this.lowerButton], { alpha: 1, duration: 0.5 })
-
-    this.higherButton.interactive = true
-    this.higherButton.cursor = 'pointer'
-
-    this.lowerButton.interactive = true
-    this.lowerButton.cursor = 'pointer'
+    await Promise.all([this.higherButton.enable(), this.lowerButton.enable()])
   }
 
   private async disableButtons() {
-    this.higherButton.interactive = false
-    this.lowerButton.interactive = false
-
-    this.higherButton.cursor = 'default'
-    this.lowerButton.cursor = 'default'
-
-    await gsap.to([this.higherButton, this.lowerButton], { alpha: 0.5, duration: 0.5 })
+    await Promise.all([this.higherButton.disable(), this.lowerButton.disable()])
   }
 
   public async play(props: { win: number }): Promise<void> {

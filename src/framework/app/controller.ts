@@ -1,7 +1,7 @@
 import { ConnectionModel } from '../connection/model'
 import { Stage } from './stage/controller'
 import { Game, GameProps } from './game/controller'
-import { Assets, Container } from 'pixi.js'
+import { Assets } from 'pixi.js'
 import { GameView } from './game/view'
 import { UI } from './ui/controller'
 
