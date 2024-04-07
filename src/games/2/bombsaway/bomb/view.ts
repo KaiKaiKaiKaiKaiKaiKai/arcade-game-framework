@@ -6,6 +6,7 @@ export class Bomb extends Container {
   private flame: Sprite
   private explosion: Sprite
   private wire: Sprite
+  private backWire: Sprite
   private _wireLength!: number
 
   constructor() {
@@ -15,8 +16,12 @@ export class Bomb extends Container {
 
     this.bomb = Sprite.from('bomb')
 
+    this.backWire = Sprite.from(Texture.WHITE)
+    this.backWire.tint = 0xb43e50
+    this.backWire.alpha = 0.5
+
     this.wire = Sprite.from(Texture.WHITE)
-    this.wire.tint = 0x8c7e56
+    this.wire.tint = 0xb43e50
     this.wire.height = 1
     this.wire.width = 10
     this.wire.x = this.bomb.width / 2 - this.wire.width / 2
@@ -30,6 +35,7 @@ export class Bomb extends Container {
     this.explosion.scale.set(0)
 
     this.addChild(this.bomb)
+    this.addChild(this.backWire)
     this.addChild(this.wire)
     this.addChild(this.flame)
     this.addChild(this.explosion)
@@ -40,6 +46,11 @@ export class Bomb extends Container {
 
     this.wire.scale.y = this._wireLength
     this.wire.y = -this._wireLength
+
+    this.backWire.height = this.wire.height
+    this.backWire.width = this.wire.width
+    this.backWire.x = this.wire.x
+    this.backWire.y = this.wire.y
 
     this.flame.y = -this._wireLength - this.flame.height
     this.flame.scale.set(0)

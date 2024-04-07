@@ -14,11 +14,11 @@ export class BombsAwayView extends GameView {
   constructor() {
     super()
 
-    this.scaleFactor = 0.8
+    this.scaleFactor = 0.9
     this.sortableChildren = true
 
     this.bomb = new Bomb()
-    this.bomb.zIndex = 0
+    this.bomb.zIndex = 2
 
     this.timeOptions = [1, 2, 3, 4, 5]
 
@@ -28,28 +28,23 @@ export class BombsAwayView extends GameView {
       const timeButton = this.timeButtons[i]
 
       timeButton.y = (timeButton.height + 20) * i
-      timeButton.x = this.bomb.width + 300
-      timeButton.zIndex = 2
+      timeButton.x = this.bomb.width / 2 + 5
+      timeButton.zIndex = 1
 
       this.addChild(timeButton)
     }
 
-    const timingBar = new Sprite(Texture.WHITE)
+    const height =
+      this.timeButtons[this.timeButtons.length - 1].y +
+      this.timeButtons[this.timeButtons.length - 1].height
 
-    timingBar.height = this.height
-    timingBar.width = this.timeButtons[0].width
-    timingBar.tint = 0x101010
-    timingBar.zIndex = 1
-    timingBar.x = this.timeButtons[0].x
-
-    this.bomb.y = timingBar.height
-    this.bomb.wireLength = timingBar.height
+    this.bomb.y = height
+    this.bomb.wireLength = height
 
     this.winText = new WinText()
     this.winText.zIndex = 3
 
     this.addChild(this.bomb)
-    this.addChild(timingBar)
     this.addChild(this.winText)
 
     this.winText.x = this.width / 2
