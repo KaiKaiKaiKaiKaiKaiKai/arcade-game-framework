@@ -31,7 +31,7 @@ export class Wheel extends Sprite {
     await gsap.to(this, { duration: 0.5 })
   }
 
-  private async updateNumbers(isDouble: boolean) {
+  private async updateNumbers(isDouble: boolean, duration: number) {
     await this.pause()
 
     for (const text of this.texts) {
@@ -57,10 +57,10 @@ export class Wheel extends Sprite {
 
       await gsap.to(text, {
         alpha: 0,
-        duration: 0.5,
+        duration: duration / 2,
       })
       text.text = `${newValue}`
-      await gsap.to(text, { alpha: 1, duration: 0.5 })
+      await gsap.to(text, { alpha: 1, duration: duration / 2 })
     }
   }
 
@@ -77,7 +77,7 @@ export class Wheel extends Sprite {
 
   public async spin(win: number) {
     if (this.wasDouble) {
-      await this.updateNumbers(false)
+      await this.updateNumbers(false, 0.5)
     }
 
     const onlyDouble = !this.baseValues.includes(win)
@@ -93,7 +93,7 @@ export class Wheel extends Sprite {
       await this.rotate(doubleAngle)
       await this.pause()
       await gsap.to(this.texts[doubleIndex].scale, { x: 1.5, y: 1.5, duration: 0.5 })
-      await this.updateNumbers(true)
+      await this.updateNumbers(true, 1)
       await gsap.to(this.texts[doubleIndex].scale, { x: 1, y: 1, duration: 0.5 })
       await this.pause()
     }
@@ -101,10 +101,13 @@ export class Wheel extends Sprite {
     const angle = -(index / values.length) * 360
 
     await this.rotate(angle)
-    await this.pause()
-    await gsap.to(this.texts[index].scale, { x: 1.5, y: 1.5, duration: 0.5 })
-    await this.pause()
-    await gsap.to(this.texts[index].scale, { x: 1, y: 1, duration: 0.5 })
+
+    if (win) {
+      await this.pause()
+      await gsap.to(this.texts[index].scale, { x: 1.5, y: 1.5, duration: 0.5 })
+      await this.pause()
+      await gsap.to(this.texts[index].scale, { x: 1, y: 1, duration: 0.5 })
+    }
 
     this.wasDouble = isDouble
   }
