@@ -6,7 +6,7 @@ module.exports = (env) => {
   console.log(env);
   return {
     entry: `./src/games/${env.gameId}/app.ts`,
-    mode: 'production',
+    mode: 'development',
     module: {
       rules: [
         {
