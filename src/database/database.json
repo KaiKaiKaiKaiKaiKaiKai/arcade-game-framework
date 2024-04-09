@@ -2,21 +2,25 @@
   "name": {
     "0": "Tricky Cups",
     "1": "Higher or Lower",
-    "2": "Bombs Away"
+    "2": "Bombs Away",
+    "3": "Wheel of Payouts"
   },
   "rules": {
     "0": "Where is the ball? Find it and win triple your bet!",
     "1": "Guess if the next card is higher or lower than the last one. Get it right and win double your bet!",
-    "2": "When will the bomb explode? Guess right and win 5x your bet!"
+    "2": "When will the bomb explode? Guess right and win 5x your bet!",
+    "3": "Spin the wheel and win up to 100x your bet!"
   },
   "rtp": {
     "0": "0.96",
     "1": "0.96",
-    "2": "0.96"
+    "2": "0.96",
+    "3": "0.96"
   },
   "payout": {
-    "0": "3",
-    "1": "2",
-    "2": "5"
+    "0": ["3"],
+    "1": ["2"],
+    "2": ["5"],
+    "3": ["1", "2", "4", "5", "10", "20", "40", "50", "100"]
   }
 }

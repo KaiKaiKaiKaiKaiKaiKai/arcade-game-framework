@@ -21,7 +21,7 @@ export class ConnectionModel {
     return this.database.rtp[this.gameId]
   }
 
-  public get payout(): string {
+  public get payout(): Array<string> {
     return this.database.payout[this.gameId]
   }
 
@@ -39,9 +39,10 @@ export class ConnectionModel {
   }
 
   public get win(): number {
-    const payout = Number(this.database.payout[this.gameId])
     const rtp = Number(this.database.rtp[this.gameId])
+    const payout = this.database.payout[this.gameId]
+    const randomPayout = Number(payout[Math.floor(Math.random() * payout.length)])
 
-    return Math.random() < (rtp * 1) / payout ? payout : 0
+    return Math.random() < (rtp * 1) / randomPayout ? randomPayout : 0
   }
 }

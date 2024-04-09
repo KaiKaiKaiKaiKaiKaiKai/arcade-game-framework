@@ -9,6 +9,6 @@ interface IDatabase {
     [k in number]: string
   }
   payout: {
-    [k in number]: string
+    [k in number]: Array<string>
   }
 }
