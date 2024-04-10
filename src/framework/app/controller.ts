@@ -36,7 +36,7 @@ export class App<TGameController extends Game<TGameView>, TGameView extends Game
 
   private async bootSequence(props: AppProps<TGameController, TGameView>) {
     const { gameControllerClass, gameViewClass } = props
-    const { name, rules, rtp } = this.connection
+    const { name, rtp } = this.connection
 
     await this.loadAssetsFromManifest()
 
@@ -51,7 +51,7 @@ export class App<TGameController extends Game<TGameView>, TGameView extends Game
 
     this.updateUI()
 
-    this.game = new gameControllerClass({ name, rules, rtp, viewClass: gameViewClass })
+    this.game = new gameControllerClass({ name, viewClass: gameViewClass })
     this.winText = new WinText()
 
     resizeContainer.addChild(this.game.view)

@@ -14,7 +14,11 @@ export class Wheel extends Sprite {
 
     for (let i = 0; i < this.baseValues.length; i++) {
       const value = this.baseValues[i]
-      const text = new Text(`${value}`, { fill: 0x000000, fontSize: 80 })
+      const text = new Text(`${value}`, {
+        fill: 0x000000,
+        fontWeight: value === '++' ? 'bold' : 'normal',
+        fontSize: 80,
+      })
 
       text.anchor.set(0.5)
 
@@ -40,6 +44,7 @@ export class Wheel extends Sprite {
       if (Number.isNaN(value)) continue
 
       let newValue: number
+      let newWeight: 'bold' | 'normal'
 
       if (isDouble) {
         if (value === 0) {
@@ -47,12 +52,16 @@ export class Wheel extends Sprite {
         } else {
           newValue = value * 2
         }
+
+        newWeight = 'bold'
       } else {
         if (value === 1) {
           newValue = 0
         } else {
           newValue = value / 2
         }
+
+        newWeight = 'normal'
       }
 
       await gsap.to(text, {
@@ -60,16 +69,22 @@ export class Wheel extends Sprite {
         duration: duration / 2,
       })
       text.text = `${newValue}`
+      text.style.fontWeight = newWeight
       await gsap.to(text, { alpha: 1, duration: duration / 2 })
     }
   }
 
   private async rotate(finalAngle: number) {
-    await gsap.to(this, { angle: `+=${360 * 6}`, duration: 2, ease: 'sine.in' })
+    await gsap.to(this, { angle: `+=${360 * 5}`, duration: 2, ease: 'sine.in' })
     await gsap.to(this, {
-      angle: 360 * 12 + finalAngle,
+      angle: 360 * 10 + finalAngle + 10,
       duration: 2,
       ease: 'sine.out',
+    })
+    await gsap.to(this, {
+      angle: '-=10',
+      duration: 0.5,
+      ease: 'sine.inOut',
     })
 
     this.angle = finalAngle
@@ -81,7 +96,7 @@ export class Wheel extends Sprite {
     }
 
     const onlyDouble = !this.baseValues.includes(win)
-    const isDouble = this.doubleValues.includes(win) && (onlyDouble || Math.random() < 0.5)
+    const isDouble = this.doubleValues.includes(win) && (onlyDouble || Math.random() < 0.25)
 
     const values = isDouble ? this.doubleValues : this.baseValues
     const index = values.indexOf(win)
@@ -93,7 +108,7 @@ export class Wheel extends Sprite {
       await this.rotate(doubleAngle)
       await this.pause()
       await gsap.to(this.texts[doubleIndex].scale, { x: 1.5, y: 1.5, duration: 0.5 })
-      await this.updateNumbers(true, 1)
+      await this.updateNumbers(true, 0.5)
       await gsap.to(this.texts[doubleIndex].scale, { x: 1, y: 1, duration: 0.5 })
       await this.pause()
     }

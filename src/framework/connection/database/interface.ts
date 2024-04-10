@@ -6,9 +6,12 @@ interface IDatabase {
     [k in number]: string
   }
   rtp: {
-    [k in number]: string
+    [k in number]: number
   }
   payout: {
-    [k in number]: Array<string>
+    [k in number]: Array<number>
+  }
+  weight: {
+    [k in number]: Array<number>
   }
 }

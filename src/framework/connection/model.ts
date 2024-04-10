@@ -9,6 +9,46 @@ export class ConnectionModel {
     this.gameId = props.gameId
   }
 
+  private getWeightedRandom() {
+    let totalWeight = 0
+    let random
+
+    for (let i = 0; i < this.weight.length; i++) {
+      totalWeight += this.weight[i]
+    }
+
+    random = Math.random() * totalWeight
+
+    for (let i = 0; i < this.weight.length; i++) {
+      if (random < this.weight[i]) {
+        return i
+      }
+
+      random -= this.weight[i]
+    }
+
+    return -1
+  }
+
+  private calculateHitRate(): number {
+    // Calculate the total weight
+    const totalWeight = this.weight.reduce((sum, weight) => sum + weight, 0)
+
+    // Calculate the hit rate
+    let hitRate = 0
+    for (let i = 0; i < this.payout.length; i++) {
+      // Calculate the probability of selecting this payout
+      const selectProbability = this.weight[i] / totalWeight
+      // Calculate the probability of the condition being true for this payout
+      const conditionProbability = 0.96 / this.payout[i]
+      // Add the product of the two probabilities to the hit rate
+      hitRate += selectProbability * conditionProbability
+    }
+
+    // Return the hit rate as a percentage
+    return hitRate * 100
+  }
+
   public get name(): string {
     return this.database.name[this.gameId]
   }
@@ -17,12 +57,16 @@ export class ConnectionModel {
     return this.database.rules[this.gameId]
   }
 
-  public get rtp(): string {
+  public get rtp(): number {
     return this.database.rtp[this.gameId]
   }
 
-  public get payout(): Array<string> {
+  public get payout(): Array<number> {
     return this.database.payout[this.gameId]
+  }
+
+  public get weight(): Array<number> {
+    return this.database.weight[this.gameId]
   }
 
   public get bank(): number {
@@ -39,9 +83,12 @@ export class ConnectionModel {
   }
 
   public get win(): number {
-    const rtp = Number(this.database.rtp[this.gameId])
-    const payout = this.database.payout[this.gameId]
-    const randomPayout = Number(payout[Math.floor(Math.random() * payout.length)])
+    console.log(this.calculateHitRate())
+    const rtp = Number(this.rtp)
+    const randomIndex = this.getWeightedRandom()
+    const randomPayout = this.payout[randomIndex]
+
+    console.log(randomIndex, randomPayout)
 
     return Math.random() < (rtp * 1) / randomPayout ? randomPayout : 0
   }

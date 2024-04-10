@@ -15,7 +15,7 @@ export class UIView extends Container {
   private gameName: Text
   private playText: Text
 
-  constructor(props: { name: string; rtp: string }) {
+  constructor(props: { name: string; rtp: number }) {
     super()
 
     const { name, rtp } = props
@@ -41,7 +41,7 @@ export class UIView extends Container {
     this.nameBackground.height = 25
     this.nameBackground.tint = 0x101010
 
-    this.gameName = new Text(`${name} | ${Number(rtp) * 100}%`, { fill: 0xa1a1a1, fontSize: 15 })
+    this.gameName = new Text(`${name} | ${rtp * 100}%`, { fill: 0xa1a1a1, fontSize: 15 })
     this.playText = new Text('Play Round', { fill: 0x101010, fontWeight: 'bold', fontSize: 20 })
     this.bankText = new Text('', { fill: 0xffffff, fontSize: 15 })
     this.betText = new Text('', { fill: 0xffffff, fontSize: 15 })
