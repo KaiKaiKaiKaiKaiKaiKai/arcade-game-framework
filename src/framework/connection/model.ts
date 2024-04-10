@@ -40,7 +40,7 @@ export class ConnectionModel {
       // Calculate the probability of selecting this payout
       const selectProbability = this.weight[i] / totalWeight
       // Calculate the probability of the condition being true for this payout
-      const conditionProbability = 0.96 / this.payout[i]
+      const conditionProbability = this.rtp / this.payout[i]
       // Add the product of the two probabilities to the hit rate
       hitRate += selectProbability * conditionProbability
     }
