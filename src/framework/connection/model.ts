@@ -83,12 +83,9 @@ export class ConnectionModel {
   }
 
   public get win(): number {
-    console.log(this.calculateHitRate())
     const rtp = Number(this.rtp)
     const randomIndex = this.getWeightedRandom()
     const randomPayout = this.payout[randomIndex]
-
-    console.log(randomIndex, randomPayout)
 
     return Math.random() < (rtp * 1) / randomPayout ? randomPayout : 0
   }
