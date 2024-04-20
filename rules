@@ -14,6 +14,3 @@ npm run build -- --env gameId=0
 
 TO DO:
 DONE!!
-Add splash screen with rules?
-Clean up UI (last thing)
-Add comments
