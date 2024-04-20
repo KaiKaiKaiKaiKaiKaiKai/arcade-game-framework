@@ -4,15 +4,27 @@ import { GameView } from '../../../framework/app/game/view'
 import { Table } from './table/view'
 import { Game0Setup, Setup } from '../../../framework/connection/database/interface'
 
+/**
+ * Represents the view for the Tricky Cups game.
+ * @extends GameView
+ */
 export class TrickyCupsView extends GameView {
   private ball!: Ball
   private cups!: Cups
   private table!: Table
 
+  /**
+   * Creates an instance of TrickyCupsView.
+   * @param {Setup} setup - The setup for the Tricky Cups game.
+   */
   constructor(setup: Setup) {
     super(setup)
   }
 
+  /**
+   * Creates the initial elements for the Tricky Cups game.
+   * @protected
+   */
   protected createInitial() {
     this.scaleFactor = 0.95
     this.sortableChildren = true
@@ -28,11 +40,21 @@ export class TrickyCupsView extends GameView {
     this.addChild(this.cups)
   }
 
-  private async userSelection(win: number) {
+  /**
+   * Handles the user's selection.
+   * @private
+   * @param {number} win - The payout.
+   * @returns {Promise<void>} A promise that resolves when the user's selection is processed.
+   */
+  private async userSelection(win: number): Promise<void> {
     await this.cups.userSelection(win)
   }
 
-  private placeBall() {
+  /**
+   * Places the ball on the winning cup.
+   * @private
+   */
+  private placeBall(): void {
     const winningCup = this.cups.winningCup
     const { x, width } = winningCup
 
@@ -42,7 +64,13 @@ export class TrickyCupsView extends GameView {
     this.addChild(this.ball)
   }
 
-  public async play(props: { win: number }) {
+  /**
+   * Initiates the play action for the Tricky Cups game.
+   * @param {Object} props - The properties required for playing the game.
+   * @param {number} props.win - The payout.
+   * @returns {Promise<void>} A promise that resolves when the play action is completed.
+   */
+  public async play(props: { win: number }): Promise<void> {
     const { win } = props
 
     this.placeBall()
