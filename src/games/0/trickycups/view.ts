@@ -2,14 +2,15 @@ import { Cups } from './cups/view'
 import { Ball } from './ball/view'
 import { GameView } from '../../../framework/app/game/view'
 import { Table } from './table/view'
+import { Game0Setup, Setup } from '../../../framework/connection/database/interface'
 
 export class TrickyCupsView extends GameView {
   private ball!: Ball
   private cups!: Cups
   private table!: Table
 
-  constructor() {
-    super()
+  constructor(setup: Setup) {
+    super(setup)
   }
 
   protected createInitial() {
@@ -18,7 +19,9 @@ export class TrickyCupsView extends GameView {
 
     this.table = new Table()
 
-    this.cups = new Cups()
+    const { cupAmount } = this.setup as Game0Setup
+
+    this.cups = new Cups(cupAmount)
     this.cups.x = this.table.width / 2 - this.cups.width / 2
 
     this.addChild(this.table)

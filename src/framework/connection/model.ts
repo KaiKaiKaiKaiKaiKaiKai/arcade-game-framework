@@ -1,4 +1,5 @@
 import databaseJson from '../../database/database.json'
+import { IDatabase, Setup } from './database/interface'
 
 export class ConnectionModel {
   private database: IDatabase
@@ -69,12 +70,16 @@ export class ConnectionModel {
     return this.database.weight[this.gameId]
   }
 
+  public get setup(): Setup {
+    return this.database.setup[this.gameId]
+  }
+
   public get bank(): number {
     return 500
   }
 
   public get bet(): number {
-    return 10
+    return 1
   }
 
   public getNextBet(increase: boolean, currentBet: number): number {

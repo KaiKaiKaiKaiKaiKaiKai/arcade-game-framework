@@ -1,22 +1,27 @@
 import gsap from 'gsap'
 import { Sprite, Text, Texture } from 'pixi.js'
 
+type Value = number | string
+
 export class Wheel extends Sprite {
-  private baseValues: Array<number | string> = [0, 1, 2, 5, '++', 10, 20, 50]
-  private doubleValues: Array<number | string> = [1, 2, 4, 10, '++', 20, 40, 100]
+  private baseValues: Array<Value>
+  private doubleValues: Array<Value>
   private texts: Array<Text> = []
   private wasDouble: boolean = false
 
-  constructor() {
+  constructor(props: { baseValues: Array<Value>; doubleValues: Array<Value> }) {
     super(Texture.from('wheel'))
 
     this.anchor.set(0.5)
+
+    this.baseValues = props.baseValues
+    this.doubleValues = props.doubleValues
 
     for (let i = 0; i < this.baseValues.length; i++) {
       const value = this.baseValues[i]
       const text = new Text(`${value}`, {
         fill: 0x000000,
-        fontWeight: value === '++' ? 'bold' : 'normal',
+        fontWeight: typeof value === 'string' ? 'bold' : 'normal',
         fontSize: 80,
       })
 
@@ -102,7 +107,7 @@ export class Wheel extends Sprite {
     const index = values.indexOf(win)
 
     if (isDouble) {
-      const doubleIndex = values.indexOf('++')
+      const doubleIndex = values.findIndex((value) => typeof value === 'string')
       const doubleAngle = -(doubleIndex / values.length) * 360
 
       await this.rotate(doubleAngle)

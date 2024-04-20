@@ -4,6 +4,7 @@ import { Table } from './table/view'
 import { Card } from './card/view'
 import { Sprite, Texture } from 'pixi.js'
 import { Button } from '../../../framework/app/game/button/view'
+import { Game1Setup, Setup } from '../../../framework/connection/database/interface'
 
 export class HigherOrLowerView extends GameView {
   private table!: Table
@@ -17,16 +18,18 @@ export class HigherOrLowerView extends GameView {
   private houseCard!: Card
   private userCard!: Card
 
-  constructor() {
-    super()
+  constructor(setup: Setup) {
+    super(setup)
   }
 
   protected createInitial() {
     this.scaleFactor = 1
     this.sortableChildren = true
 
-    this.values = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A']
-    this.suits = ['heart', 'diamond', 'club', 'spade']
+    const { values, suits } = this.setup as Game1Setup
+
+    this.values = values
+    this.suits = suits
 
     this.table = new Table()
 
@@ -142,7 +145,10 @@ export class HigherOrLowerView extends GameView {
 
     this.houseCard = houseCard
 
-    if (houseCardValue === 'A' || houseCardValue === '2') {
+    if (
+      this.values.indexOf(houseCardValue) === 0 ||
+      this.values.indexOf(houseCardValue) === this.values.length - 1
+    ) {
       await gsap.to(this, { duration: 1 })
       return this.play({ win })
     }

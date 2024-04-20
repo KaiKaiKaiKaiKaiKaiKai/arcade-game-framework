@@ -1,14 +1,14 @@
 import { Container, Sprite, Texture } from 'pixi.js'
 import { GameView } from '../../../framework/app/game/view'
-import gsap from 'gsap'
 import { Wheel } from './wheel/view'
+import { Game3Setup, Setup } from '../../../framework/connection/database/interface'
 
 export class WheelOfPayoutsView extends GameView {
   private wheelContainer!: Container
   private wheel!: Wheel
 
-  constructor() {
-    super()
+  constructor(setup: Setup) {
+    super(setup)
   }
 
   protected createInitial() {
@@ -21,7 +21,7 @@ export class WheelOfPayoutsView extends GameView {
     this.wheelContainer.angle = -90
     this.wheelContainer.position.set(board.width / 2, board.height / 2)
 
-    this.wheel = new Wheel()
+    this.wheel = new Wheel(this.setup as Game3Setup)
 
     this.wheelContainer.addChild(this.wheel)
 

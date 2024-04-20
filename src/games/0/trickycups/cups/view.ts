@@ -6,12 +6,12 @@ export class Cups extends Container {
   private chosenCup: Sprite | null = null
   public winningCup: Sprite
 
-  constructor() {
+  constructor(cupAmount: number) {
     super()
 
     this.zIndex = 2
 
-    for (let i = 0; i < 3; i++) {
+    for (let i = 0; i < cupAmount; i++) {
       const cup = Sprite.from(Texture.from('redcup'))
       cup.x = (cup.width + 50) * i
 
@@ -19,7 +19,8 @@ export class Cups extends Container {
       this.addChild(cup)
     }
 
-    this.winningCup = this.cups[1]
+    // Initially set the winning cup to the middle cup
+    this.winningCup = this.cups[Math.round((this.cups.length - 1) / 2)]
   }
 
   private async liftCup(cup: Sprite) {

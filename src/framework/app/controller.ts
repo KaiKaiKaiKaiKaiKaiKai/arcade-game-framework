@@ -5,10 +5,11 @@ import { Assets } from 'pixi.js'
 import { GameView } from './game/view'
 import { UI } from './ui/controller'
 import { WinText } from './game/text/win/view'
+import { Setup } from '../connection/database/interface'
 
 interface AppProps<TGameController extends Game<TGameView>, TGameView extends GameView> {
   gameControllerClass: new (props: GameProps<TGameView>) => TGameController
-  gameViewClass: new () => TGameView
+  gameViewClass: new (setup: Setup) => TGameView
   gameId: number
 }
 
@@ -36,7 +37,7 @@ export class App<TGameController extends Game<TGameView>, TGameView extends Game
 
   private async bootSequence(props: AppProps<TGameController, TGameView>) {
     const { gameControllerClass, gameViewClass } = props
-    const { name, rtp } = this.connection
+    const { name, setup, rtp } = this.connection
 
     await this.loadAssetsFromManifest()
 
@@ -51,7 +52,7 @@ export class App<TGameController extends Game<TGameView>, TGameView extends Game
 
     this.updateUI()
 
-    this.game = new gameControllerClass({ name, viewClass: gameViewClass })
+    this.game = new gameControllerClass({ setup, viewClass: gameViewClass })
     this.winText = new WinText()
 
     resizeContainer.addChild(this.game.view)

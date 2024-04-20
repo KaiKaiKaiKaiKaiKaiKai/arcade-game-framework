@@ -3,6 +3,7 @@ import { WinText } from '../../../framework/app/game/text/win/view'
 import { TimerButton } from './timer-button/view'
 import { Container, Sprite, Texture } from 'pixi.js'
 import { Bomb } from './bomb/view'
+import { Game2Setup, Setup } from '../../../framework/connection/database/interface'
 
 export class BombsAwayView extends GameView {
   private timeOptions!: Array<number>
@@ -11,8 +12,8 @@ export class BombsAwayView extends GameView {
   private bomb!: Bomb
   private selectedTime!: number
 
-  constructor() {
-    super()
+  constructor(setup: Setup) {
+    super(setup)
   }
 
   protected createInitial() {
@@ -22,7 +23,9 @@ export class BombsAwayView extends GameView {
     this.bomb = new Bomb()
     this.bomb.zIndex = 2
 
-    this.timeOptions = [1, 2, 3, 4, 5]
+    const { timeOptions } = this.setup as Game2Setup
+
+    this.timeOptions = timeOptions
     this.timeButtonContainer = new Container()
 
     this.timeButtons = []
