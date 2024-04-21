@@ -97,11 +97,10 @@ export class ConnectionModel {
    * @type {number}
    */
   public get win(): number {
-    const rtp = Number(this.rtp)
     const randomIndex = this.getWeightedRandom()
     const randomPayout = this.payout[randomIndex]
 
-    return Math.random() < (rtp * 1) / randomPayout ? randomPayout : 0
+    return Math.random() < (this.rtp * 1) / randomPayout ? randomPayout : 0
   }
 
   /**
