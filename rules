@@ -1,16 +1,2 @@
-Controller, Model or View?
-  Does it return anything except view?
-    No
-      It's a Controller
-    Yes
-      Does it display anything?
-        No
-          It's a Model
-        Yes
-          It's a View
-
 npm run dev -- --env gameId=0
 npm run build -- --env gameId=0
-
-TO DO:
-DONE!!
